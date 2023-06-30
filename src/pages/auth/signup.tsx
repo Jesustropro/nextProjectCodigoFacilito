@@ -1,5 +1,6 @@
-import { Input, Button } from "@nextui-org/react";
+import { Input } from "@nextui-org/react";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -7,7 +8,31 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
-  const handlerSubmitForm = () => {};
+  const { replace } = useRouter();
+
+  const handlerSubmitForm = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+
+    if (password !== repeatPassword) {
+      console.log("contraseñas no coinciden");
+      return;
+    }
+
+    try {
+      const result = await fetch("http://localhost:3000/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, name, lastName, password }),
+      });
+      const response = await result.json();
+
+      if (response && result.status === 200) {
+        replace("/auth/login");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <form onSubmit={handlerSubmitForm}>
       <Input
@@ -55,9 +80,7 @@ const SignUp = () => {
         size="lg"
       />
 
-      <Button auto color="secondary" rounded flat>
-        Login
-      </Button>
+      <button>Login</button>
     </form>
   );
 };

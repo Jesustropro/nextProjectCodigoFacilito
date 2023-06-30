@@ -1,6 +1,10 @@
 import { Navbar, Link, Text, Avatar, Dropdown } from "@nextui-org/react";
+import { useSession, signIn, signOut } from "next-auth/react";
+import NextLink from "next/link";
 
 export default function NavBar() {
+  const { data: session } = useSession();
+
   const collapseItems = [
     "Cuenta",
     "Favoritos",
@@ -55,31 +59,28 @@ export default function NavBar() {
               />
             </Dropdown.Trigger>
           </Navbar.Item>
-          <Dropdown.Menu
-            aria-label="User menu actions"
-            color="secondary"
-            onAction={(actionKey) => console.log({ actionKey })}
-          >
-            <Dropdown.Item key="profile" css={{ height: "$18" }}>
-              <Text b color="inherit" css={{ d: "flex" }}>
-                Registrado como
-              </Text>
-              <Text b color="inherit" css={{ d: "flex" }}>
-                zoey@example.com
-              </Text>
-            </Dropdown.Item>
 
-            <Dropdown.Item key="analytics" withDivider>
-              Mis favoritos
-            </Dropdown.Item>
-
-            <Dropdown.Item key="help_and_feedback" withDivider>
-              Ayuda y comentarios
-            </Dropdown.Item>
-            <Dropdown.Item key="logout" withDivider color="error">
-              Cerrar sesión
-            </Dropdown.Item>
-          </Dropdown.Menu>
+          {session ? (
+            <Dropdown.Menu aria-label="User menu actions" color="secondary">
+              <Dropdown.Item key="profile" css={{ height: "$18" }}>
+                <Text b color="inherit" css={{ d: "flex" }}>
+                  {`¡Hola ${session.user.name}!`}
+                </Text>
+              </Dropdown.Item>
+              <Dropdown.Item key="analytics" withDivider>
+                Mis favoritos
+              </Dropdown.Item>
+              <Dropdown.Item key="logout" withDivider color="error">
+                <div onClick={() => signOut()}>Cerrar sesión</div>
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          ) : (
+            <Dropdown.Menu aria-label="User menu actions" color="secondary">
+              <Dropdown.Item key="signup" color="success">
+                <div onClick={() => signIn()}>Iniciar sesión</div>
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          )}
         </Dropdown>
       </Navbar.Content>
       <Navbar.Collapse>
