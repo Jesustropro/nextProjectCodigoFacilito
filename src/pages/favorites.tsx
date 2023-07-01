@@ -9,7 +9,7 @@ export default function Favorites() {
     <>
       <NavBar />
       <h1>Favorites</h1>
-      {session?.user.likes.map((quote: any) => {
+      {session?.user?.likes.map((quote: any) => {
         return <Card key={quote._id} quotes={quote} />;
       })}
     </>

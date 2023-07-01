@@ -65,7 +65,7 @@ export default function NavBar() {
             <Dropdown.Menu aria-label="User menu actions" color="secondary">
               <Dropdown.Item key="profile" css={{ height: "$18" }}>
                 <Text b color="inherit" css={{ d: "flex" }}>
-                  {`¡Hello ${session?.user.name}!`}
+                  {`¡Hello ${session?.user?.name}!`}
                 </Text>
               </Dropdown.Item>
               <Dropdown.Item key="analytics" withDivider>

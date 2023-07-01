@@ -10,11 +10,11 @@ export default function CardQuote({ quotes, categoryId }: any) {
   const liked = async (quotes: any, categoryId: any) => {
     try {
       const result = await fetch(
-        `http://localhost:3000/api/auth/liked?id=${session?.user._id}`,
+        `http://localhost:3000/api/auth/liked?id=${session?.user?._id}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ quotes, likes: session?.user.likes }),
+          body: JSON.stringify({ quotes, likes: session?.user?.likes }),
         }
       );
       categoryId ? router.push(`/category/${categoryId}`) : router.push("/");
