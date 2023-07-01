@@ -1,14 +1,13 @@
 import { Input } from "@nextui-org/react";
 import { useState } from "react";
 import { useRouter } from "next/router";
-
+import { signIn } from "next-auth/react";
 const SignUp = () => {
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
-  const { replace } = useRouter();
 
   const handlerSubmitForm = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -27,7 +26,7 @@ const SignUp = () => {
       const response = await result.json();
 
       if (response && result.status === 200) {
-        replace("/auth/login");
+        signIn();
       }
     } catch (error) {
       console.error(error);

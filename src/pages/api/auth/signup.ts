@@ -48,6 +48,7 @@ export default async function handler(
           ...req.body,
           email,
           password: passwordHashing,
+          likes: [],
         });
         res.status(200).json({ message: "Done!", newUser });
       });
@@ -58,3 +59,8 @@ export default async function handler(
     });
   }
 }
+export const config = {
+  api: {
+    externalResolver: true,
+  },
+};

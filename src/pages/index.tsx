@@ -1,24 +1,37 @@
 import NavBar from "../components/NavBar";
-
-export default function Home() {
+import fetcher from "./utils/fetcher";
+import Card from "../components/Card";
+import { useRouter } from "next/router";
+export default function Home({ only5 }: any) {
+  const router = useRouter();
   return (
     <>
       <NavBar />
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        {only5.map((quotes: any) => {
+          return <Card key={quotes.id} quotes={quotes} />;
+        })}
+      </div>
+      <button
+        onClick={() => {
+          router.push(`/`);
+        }}
+      >
+        refresh
+      </button>
     </>
   );
 }
 
-/* export async function getServerSideProps(context) {
-  const data = await fetch(
-    "https://api.quotable.io/quotes/random?limit=5"
-  ).then((res) => {
-    res.json().then((response) => {
-      console.log(response);
-    });
-  });
-
-  return {
-    props: data,
-  };
+export async function getServerSideProps() {
+  try {
+    const only5 = await fetcher(`?limit=5`);
+    return {
+      props: {
+        only5,
+      },
+    };
+  } catch (error) {
+    console.log(error);
+  }
 }
-*/

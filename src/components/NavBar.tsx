@@ -1,16 +1,13 @@
 import { Navbar, Link, Text, Avatar, Dropdown } from "@nextui-org/react";
 import { useSession, signIn, signOut } from "next-auth/react";
-import NextLink from "next/link";
+
+import { useRouter } from "next/router";
 
 export default function NavBar() {
+  const router = useRouter();
   const { data: session } = useSession();
 
-  const collapseItems = [
-    "Cuenta",
-    "Favoritos",
-    "Ayuda y comentarios",
-    "Cerrar sesión",
-  ];
+  const collapseItems = ["Account", "Favorites", "LogOut"];
 
   return (
     <Navbar isBordered variant="sticky">
@@ -22,8 +19,8 @@ export default function NavBar() {
           },
         }}
       >
-        <Text b color="inherit" hideIn="xs">
-          BuscaTuViaje
+        <Text onClick={() => router.push("/")} b color="inherit" hideIn="xs">
+          YouReadIt?
         </Text>
       </Navbar.Brand>
       <Navbar.Content
@@ -32,12 +29,16 @@ export default function NavBar() {
         hideIn="xs"
         variant="highlight-rounded"
       >
-        <Navbar.Link isActive href="#">
-          Ofertas
+        <Navbar.Link onClick={() => router.push("/")}>Random</Navbar.Link>
+        <Navbar.Link onClick={() => router.push("/category/wisdom")}>
+          Wisdom
         </Navbar.Link>
-        <Navbar.Link href="#">Nacionales</Navbar.Link>
-        <Navbar.Link href="#">Internacionales</Navbar.Link>
-        <Navbar.Link href="#">Nosotros</Navbar.Link>
+        <Navbar.Link onClick={() => router.push("/category/love")}>
+          Love
+        </Navbar.Link>
+        <Navbar.Link onClick={() => router.push("/category/inspirational")}>
+          Inspirational
+        </Navbar.Link>
       </Navbar.Content>
       <Navbar.Content
         css={{
@@ -64,20 +65,22 @@ export default function NavBar() {
             <Dropdown.Menu aria-label="User menu actions" color="secondary">
               <Dropdown.Item key="profile" css={{ height: "$18" }}>
                 <Text b color="inherit" css={{ d: "flex" }}>
-                  {`¡Hola ${session.user.name}!`}
+                  {`¡Hello ${session?.user.name}!`}
                 </Text>
               </Dropdown.Item>
               <Dropdown.Item key="analytics" withDivider>
-                Mis favoritos
+                <Navbar.Link onClick={() => router.push("/favorites")}>
+                  My favourites
+                </Navbar.Link>
               </Dropdown.Item>
               <Dropdown.Item key="logout" withDivider color="error">
-                <div onClick={() => signOut()}>Cerrar sesión</div>
+                <div onClick={() => signOut()}>LogOut</div>
               </Dropdown.Item>
             </Dropdown.Menu>
           ) : (
             <Dropdown.Menu aria-label="User menu actions" color="secondary">
               <Dropdown.Item key="signup" color="success">
-                <div onClick={() => signIn()}>Iniciar sesión</div>
+                <div onClick={() => signIn()}>SingIn</div>
               </Dropdown.Item>
             </Dropdown.Menu>
           )}
