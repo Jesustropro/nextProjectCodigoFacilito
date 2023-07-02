@@ -1,13 +1,10 @@
-import { Input, Button } from "@nextui-org/react";
+import { Input } from "@nextui-org/react";
 import { useState } from "react";
-import { signIn, useSession, getSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { signIn, getSession } from "next-auth/react";
 
 const Login = () => {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { data } = useSession();
 
   const handlerSubmitForm = (e: { preventDefault: () => void }) => {
     e.preventDefault();

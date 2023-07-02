@@ -3,7 +3,7 @@ import { useSession } from "next-auth/react";
 import Card from "@/components/Card";
 
 export default function Favorites() {
-  const { data: session } = useSession();
+  const { data: session }: any = useSession();
 
   return (
     <>

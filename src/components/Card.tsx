@@ -3,7 +3,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 export default function CardQuote({ quotes, categoryId }: any) {
-  const { data: session } = useSession();
+  const { data: session }: any = useSession();
   const router = useRouter();
   const { author, content, tags } = quotes;
 
@@ -17,7 +17,9 @@ export default function CardQuote({ quotes, categoryId }: any) {
           body: JSON.stringify({ quotes, likes: session?.user?.likes }),
         }
       );
-      categoryId ? router.push(`/category/${categoryId}`) : router.push("/");
+
+      return result.json();
+      /*     categoryId ? router.push(`/category/${categoryId}`) : router.push("/"); */
     } catch (error) {
       console.error(error);
     }
