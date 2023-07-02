@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import NavBar from "@/components/NavBar";
-import fetcher from "../utils/fetcher";
+import fetcher from "@/utils/fetcher";
 import Card from "@/components/Card";
 
 export default function Category({ category5 }: any) {
