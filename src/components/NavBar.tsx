@@ -80,7 +80,7 @@ export default function NavBar() {
           ) : (
             <Dropdown.Menu aria-label="User menu actions" color="secondary">
               <Dropdown.Item key="signup" color="success">
-                <div onClick={() => signIn()}>SingIn</div>
+                <div onClick={() => router.push("/auth/login")}>SingIn</div>
               </Dropdown.Item>
             </Dropdown.Menu>
           )}
