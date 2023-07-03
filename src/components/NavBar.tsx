@@ -67,17 +67,17 @@ export default function NavBar() {
               </Dropdown.Item>
               <Dropdown.Item key="analytics" withDivider>
                 <Navbar.Link onClick={() => router.push("/favorites")}>
-                  My favourites
+                  Favorites
                 </Navbar.Link>
               </Dropdown.Item>
               <Dropdown.Item key="logout" withDivider color="error">
-                <div onClick={() => signOut()}>LogOut</div>
+                <div onClick={() => signOut()}>Log Out</div>
               </Dropdown.Item>
             </Dropdown.Menu>
           ) : (
             <Dropdown.Menu aria-label="User menu actions" color="secondary">
               <Dropdown.Item key="signup" color="success">
-                <div onClick={() => router.push("/auth/login")}>SingIn</div>
+                <div onClick={() => router.push("/auth/login")}>Sign In</div>
               </Dropdown.Item>
             </Dropdown.Menu>
           )}
