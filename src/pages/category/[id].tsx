@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import NavBar from "@/components/NavBar";
-import fetcher from "../utils/fetcher";
+import fetcher from "@/utils/fetcher";
 import Card from "@/components/Card";
 
 export default function Category({ category5 }: any) {
@@ -8,10 +8,14 @@ export default function Category({ category5 }: any) {
     query: { id },
   } = useRouter();
   const router = useRouter();
+
+  const title = `${id}`?.charAt(0).toUpperCase() + id?.slice(1);
+
   return (
     <>
       <NavBar />
-      <h1>{id}</h1>
+
+      <h1 style={{ display: "flex", justifyContent: "center" }}>{title}</h1>
       <div style={{ display: "flex", justifyContent: "center" }}>
         {category5.map((quotes: any) => {
           return <Card key={quotes.id} quotes={quotes} categoryId={id} />;

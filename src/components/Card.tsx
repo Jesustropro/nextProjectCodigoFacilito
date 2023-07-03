@@ -2,9 +2,9 @@ import { Card, Col, Text, Button, Row } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
-export default function CardQuote({ quotes, categoryId }: any) {
+export default function CardQuote({ quotes, categoryId, likedPost }: any) {
   const { data: session }: any = useSession();
-  const router = useRouter();
+
   const { author, content, tags } = quotes;
 
   const liked = async (quotes: any, categoryId: any) => {
@@ -17,15 +17,12 @@ export default function CardQuote({ quotes, categoryId }: any) {
           body: JSON.stringify({ quotes, likes: session?.user?.likes }),
         }
       );
-
-      return result.json();
-      /*     categoryId ? router.push(`/category/${categoryId}`) : router.push("/"); */
     } catch (error) {
       console.error(error);
     }
   };
   return (
-    <Card css={{ mw: "330px" }}>
+    <Card css={{ mw: "330px", margin: 2, marginTop: 10 }}>
       <Card.Header>
         <Text b>
           {tags.length > 1
@@ -55,7 +52,7 @@ export default function CardQuote({ quotes, categoryId }: any) {
               {author}
             </Text>
           </Col>
-          {session && (
+          {session && !likedPost && (
             <Col>
               <Row justify="flex-end">
                 <Button flat auto rounded color="error">

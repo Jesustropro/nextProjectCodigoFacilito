@@ -7,11 +7,8 @@ export default function NavBar() {
   const router = useRouter();
   const { data: session } = useSession();
 
-  const collapseItems = ["Account", "Favorites", "LogOut"];
-
   return (
     <Navbar isBordered variant="sticky">
-      <Navbar.Toggle showIn="xs" />
       <Navbar.Brand
         css={{
           "@xs": {
@@ -86,28 +83,6 @@ export default function NavBar() {
           )}
         </Dropdown>
       </Navbar.Content>
-      <Navbar.Collapse>
-        {collapseItems.map((item, index) => (
-          <Navbar.CollapseItem
-            key={item}
-            activeColor="secondary"
-            css={{
-              color: index === collapseItems.length - 1 ? "$error" : "",
-            }}
-            isActive={index === 2}
-          >
-            <Link
-              color="inherit"
-              css={{
-                minWidth: "100%",
-              }}
-              href="#"
-            >
-              {item}
-            </Link>
-          </Navbar.CollapseItem>
-        ))}
-      </Navbar.Collapse>
     </Navbar>
   );
 }

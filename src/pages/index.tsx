@@ -4,10 +4,22 @@ import Card from "../components/Card";
 import { useRouter } from "next/router";
 export default function Home({ only5 }: any) {
   const router = useRouter();
+
   return (
     <>
       <NavBar />
-      <div style={{ display: "flex", justifyContent: "center" }}>
+
+      <h1
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        Randoms Quotes
+      </h1>
+      <div
+        style={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}
+      >
         {only5.map((quotes: any) => {
           return <Card key={quotes._id} quotes={quotes} />;
         })}

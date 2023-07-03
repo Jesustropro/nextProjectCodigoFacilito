@@ -2,6 +2,7 @@ import { Input } from "@nextui-org/react";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
+import NavBar from "@/components/NavBar";
 const SignUp = () => {
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -33,54 +34,57 @@ const SignUp = () => {
     }
   };
   return (
-    <form onSubmit={handlerSubmitForm}>
-      <Input
-        onChange={(e) => {
-          setName(e.target.value);
-        }}
-        labelPlaceholder="First name"
-        value={name}
-        size="lg"
-      />
+    <>
+      <NavBar />
+      <form onSubmit={handlerSubmitForm} style={{ marginTop: 40 }}>
+        <Input
+          onChange={(e) => {
+            setName(e.target.value);
+          }}
+          labelPlaceholder="First name"
+          value={name}
+          size="lg"
+        />
 
-      <Input
-        onChange={(e) => {
-          setLastName(e.target.value);
-        }}
-        labelPlaceholder="LastName"
-        value={lastName}
-        size="lg"
-      />
+        <Input
+          onChange={(e) => {
+            setLastName(e.target.value);
+          }}
+          labelPlaceholder="LastName"
+          value={lastName}
+          size="lg"
+        />
 
-      <Input
-        onChange={(e) => {
-          setEmail(e.target.value);
-        }}
-        labelPlaceholder="Email"
-        value={email}
-        size="lg"
-      />
+        <Input
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
+          labelPlaceholder="Email"
+          value={email}
+          size="lg"
+        />
 
-      <Input.Password
-        onChange={(e) => {
-          setPassword(e.target.value);
-        }}
-        value={password}
-        labelPlaceholder="Password"
-        size="lg"
-      />
+        <Input.Password
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
+          value={password}
+          labelPlaceholder="Password"
+          size="lg"
+        />
 
-      <Input.Password
-        onChange={(e) => {
-          setRepeatPassword(e.target.value);
-        }}
-        value={repeatPassword}
-        labelPlaceholder="Repeat password"
-        size="lg"
-      />
+        <Input.Password
+          onChange={(e) => {
+            setRepeatPassword(e.target.value);
+          }}
+          value={repeatPassword}
+          labelPlaceholder="Repeat password"
+          size="lg"
+        />
 
-      <button>Login</button>
-    </form>
+        <button>Login</button>
+      </form>
+    </>
   );
 };
 export default SignUp;

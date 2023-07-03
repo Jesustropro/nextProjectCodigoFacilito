@@ -33,10 +33,15 @@ export const authOptions = {
   ],
   pages: {
     signIn: "/auth/login",
-    signOut: "/",
   },
   callbacks: {
-    async jwt({ token, user }: any) {
+    async jwt({ token, user, trigger, session }: any) {
+      /* if (trigger === "update") {
+        return {
+          ...token,
+          ...session.user,
+        };
+      }*/
       return { ...token, ...user };
     },
     async session({ session, token }: any) {
@@ -44,5 +49,6 @@ export const authOptions = {
       return session;
     },
   },
+  secret: process.env.NEXTAUTH_SECRET,
 };
 export default NextAuth(authOptions);
