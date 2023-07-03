@@ -14,13 +14,7 @@ export default function Favorites() {
           <h1 style={{ display: "flex", justifyContent: "center" }}>
             Favorites
           </h1>
-          <button
-            onClick={() => {
-              update();
-            }}
-          >
-            Refresh
-          </button>
+
           <div
             style={{
               display: "flex",

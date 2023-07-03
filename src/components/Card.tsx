@@ -3,20 +3,27 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 export default function CardQuote({ quotes, categoryId, likedPost }: any) {
-  const { data: session }: any = useSession();
+  const { data: session, update }: any = useSession();
 
   const { author, content, tags } = quotes;
 
   const liked = async (quotes: any, categoryId: any) => {
+    async function updateSession() {
+      await update({
+        ...session,
+        user: {
+          ...session?.user,
+          likes: [...session.user.likes, quotes],
+        },
+      });
+    }
     try {
-      const result = await fetch(
-        `http://localhost:3000/api/auth/liked?id=${session?.user?._id}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ quotes, likes: session?.user?.likes }),
-        }
-      );
+      const result = await fetch(`/api/auth/liked?id=${session?.user?._id}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ quotes, likes: session?.user?.likes }),
+      });
+      updateSession();
     } catch (error) {
       console.error(error);
     }

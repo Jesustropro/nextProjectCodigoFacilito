@@ -28,7 +28,7 @@ export default async function handler(
     const db = client.db("users-auth");
 
     const user = await db.collection("users").findOne({ email: email });
-    console.log(email, client, db, user);
+
     if (!user) {
       console.log("no existe ese usuario");
       res.status(400).json({ message: "user does not exist" });

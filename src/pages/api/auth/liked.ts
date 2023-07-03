@@ -14,7 +14,7 @@ export default async function handler(
     const { id } = req.query;
 
     const { quotes, likes } = req.body;
-    console.log(quotes);
+
     const idString = id?.toString().trim();
 
     const post = await db.collection("users").updateOne(
