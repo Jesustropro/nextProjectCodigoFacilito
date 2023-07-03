@@ -30,7 +30,6 @@ export default async function handler(
     const user = await db.collection("users").findOne({ email: email });
 
     if (!user) {
-      console.log("no existe ese usuario");
       res.status(400).json({ message: "user does not exist" });
       return;
     }
