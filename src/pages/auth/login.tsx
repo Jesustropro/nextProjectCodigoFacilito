@@ -1,22 +1,35 @@
-import { Input, Button } from "@nextui-org/react";
 import { useState } from "react";
 import { signIn, getSession } from "next-auth/react";
+import { Modal, Button, Text, Input, Row, Checkbox } from "@nextui-org/react";
 import NavBar from "@/components/NavBar";
+import { useRouter } from "next/router";
 import NextLink from "next/link";
 const Login = () => {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [visible, setVisible] = useState(false);
+  const [error, setError] = useState("");
   const handlerSubmitForm = (e: { preventDefault: () => void }) => {
     signIn("credentials", {
       email,
       password,
+      redirect: false,
+    }).then((e) => {
+      if (e?.status === 200) {
+        router.push("/");
+      } else {
+        setVisible(true);
+        setError("Check your email and password");
+      }
     });
+  };
+  const closeHandler = () => {
+    setVisible(false);
   };
   return (
     <>
       <NavBar />
-
       <div
         style={{
           display: "flex",
@@ -62,6 +75,30 @@ const Login = () => {
           <NextLink href="/auth/signup">here</NextLink>
         </span>
       </div>
+      {error && (
+        <div>
+          <Modal
+            closeButton
+            aria-labelledby="modal-title"
+            open={visible}
+            onClose={closeHandler}
+          >
+            <Modal.Header>
+              <Text b id="modal-title" size={18}>
+                There is a problem logging in
+              </Text>
+            </Modal.Header>
+            <Modal.Body>
+              <Text size={18}>{error}</Text>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button auto flat color="error" onPress={closeHandler}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </div>
+      )}
     </>
   );
 };

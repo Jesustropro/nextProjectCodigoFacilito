@@ -27,8 +27,7 @@ export default async function handler(
     const db = client.db("users-auth");
     const user = await db.collection("users").findOne({ email: email });
     if (user) {
-      res.status(400).json({ message: "user already exist" });
-      return;
+      return res.status(200).json({ message: "user already exist", ok: false });
     }
     bcrypt.genSalt(10, (error, salt) => {
       if (error) {

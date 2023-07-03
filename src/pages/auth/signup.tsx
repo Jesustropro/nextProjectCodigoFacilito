@@ -1,7 +1,6 @@
-import { Input } from "@nextui-org/react";
 import { useState } from "react";
-import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
+import { Modal, Button, Text, Input, Row, Checkbox } from "@nextui-org/react";
 import NavBar from "@/components/NavBar";
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -9,12 +8,14 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
-
+  const [error, setError] = useState("");
+  const [visible, setVisible] = useState(false);
   const handlerSubmitForm = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     if (password !== repeatPassword) {
-      console.log("contraseñas no coinciden");
+      setError("Your passwords do not match, please try again.");
+      setVisible(true);
       return;
     }
 
@@ -25,14 +26,21 @@ const SignUp = () => {
         body: JSON.stringify({ email, name, lastName, password }),
       });
       const response = await result.json();
-
-      if (response && result.status === 200) {
+      if (result.status === 200 && response.ok === false) {
+        setError("User already exist.");
+        setVisible(true);
+      }
+      if (response && result.status === 200 && response.ok !== false) {
         signIn();
       }
     } catch (error) {
       console.error(error);
     }
   };
+  const closeHandler = () => {
+    setVisible(false);
+  };
+
   return (
     <>
       <NavBar />
@@ -84,6 +92,31 @@ const SignUp = () => {
 
         <button>Login</button>
       </form>
+
+      {error && (
+        <div>
+          <Modal
+            closeButton
+            aria-labelledby="modal-title"
+            open={visible}
+            onClose={closeHandler}
+          >
+            <Modal.Header>
+              <Text b id="modal-title" size={18}>
+                Oh no, an error has occurred!
+              </Text>
+            </Modal.Header>
+            <Modal.Body>
+              <Text size={18}>{error}</Text>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button auto flat color="error" onPress={closeHandler}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </div>
+      )}
     </>
   );
 };

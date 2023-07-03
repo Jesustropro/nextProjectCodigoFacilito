@@ -29,7 +29,7 @@ export const authOptions = {
         if (result.status === 200 && response.user) {
           return response.user;
         } else {
-          return null;
+          console.error("error");
         }
       },
     }),

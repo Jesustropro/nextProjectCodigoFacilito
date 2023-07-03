@@ -1,10 +1,11 @@
 import { Card, Col, Text, Button, Row } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 export default function CardQuote({ quotes, categoryId, likedPost }: any) {
   const { data: session, update }: any = useSession();
-
+  const [alreadyLike, setAlreadyLike] = useState(false);
   const { author, content, tags } = quotes;
 
   const liked = async (quotes: any, categoryId: any) => {
@@ -24,6 +25,7 @@ export default function CardQuote({ quotes, categoryId, likedPost }: any) {
         body: JSON.stringify({ quotes, likes: session?.user?.likes }),
       });
       updateSession();
+      setAlreadyLike(true);
     } catch (error) {
       console.error(error);
     }
@@ -62,7 +64,13 @@ export default function CardQuote({ quotes, categoryId, likedPost }: any) {
           {session && !likedPost && (
             <Col>
               <Row justify="flex-end">
-                <Button flat auto rounded color="error">
+                <Button
+                  flat
+                  auto
+                  rounded
+                  color="error"
+                  disabled={alreadyLike ? true : false}
+                >
                   <Text
                     css={{ color: "inherit" }}
                     size={12}

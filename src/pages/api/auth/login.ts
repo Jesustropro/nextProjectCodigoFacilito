@@ -30,8 +30,9 @@ export default async function handler(
     const user = await db.collection("users").findOne({ email: email });
 
     if (!user) {
-      res.status(400).json({ message: "user does not exist" });
-      return;
+      return res
+        .status(200)
+        .json({ message: "user does not exist", ok: false });
     }
 
     bcrypt.compare(password, user.password, (error, result) => {
