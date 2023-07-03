@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import clientPromise from "@/mongoConfig/mongodb";
+import clientPromise from "@/lib/mongodb";
 import bcrypt from "bcryptjs";
 
 type Data = {};

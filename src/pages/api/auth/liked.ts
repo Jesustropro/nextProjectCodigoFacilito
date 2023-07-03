@@ -1,4 +1,4 @@
-import clientPromise from "@/mongoConfig/mongodb";
+import clientPromise from "@/lib/mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { ObjectId } from "mongodb";
 

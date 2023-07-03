@@ -16,11 +16,14 @@ export const authOptions = {
         },
       },
       async authorize(credentials) {
-        const result = await fetch("http://localhost:3000/api/auth/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(credentials),
-        });
+        const result = await fetch(
+          `${process.env.NEXTAUTH_URL}/api/auth/login`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(credentials),
+          }
+        );
         const response = await result.json();
 
         if (result.status === 200 && response.user) {
@@ -33,15 +36,10 @@ export const authOptions = {
   ],
   pages: {
     signIn: "/auth/login",
+    signOut: "/",
   },
   callbacks: {
-    async jwt({ token, user, trigger, session }: any) {
-      /* if (trigger === "update") {
-        return {
-          ...token,
-          ...session.user,
-        };
-      }*/
+    async jwt({ token, user }: any) {
       return { ...token, ...user };
     },
     async session({ session, token }: any) {
@@ -49,6 +47,5 @@ export const authOptions = {
       return session;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
 };
 export default NextAuth(authOptions);

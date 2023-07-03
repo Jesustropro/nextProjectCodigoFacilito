@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import clientPromise from "@/mongoConfig/mongodb";
+import clientPromise from "@/lib/mongodb";
 import bcrypt from "bcryptjs";
 
 type Data = {};
@@ -24,10 +24,11 @@ export default async function handler(
     const { email, password } = req.body;
 
     const client = await clientPromise;
+
     const db = client.db("users-auth");
 
     const user = await db.collection("users").findOne({ email: email });
-
+    console.log(email, client, db, user);
     if (!user) {
       console.log("no existe ese usuario");
       res.status(400).json({ message: "user does not exist" });
