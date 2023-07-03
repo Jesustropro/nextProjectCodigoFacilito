@@ -11,6 +11,7 @@ const Login = () => {
   const [visible, setVisible] = useState(false);
   const [error, setError] = useState("");
   const handlerSubmitForm = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
     signIn("credentials", {
       email,
       password,
@@ -48,6 +49,7 @@ const Login = () => {
             value={email}
             size="lg"
             type="email"
+            required={true}
           />
           {"              "}
           <Input.Password
@@ -58,17 +60,9 @@ const Login = () => {
             type="password"
             labelPlaceholder="Password"
             size="lg"
+            required={true}
           />
-          <Button
-            style={{ display: "initial" }}
-            auto
-            color="secondary"
-            rounded
-            flat
-            onClick={handlerSubmitForm}
-          >
-            Login
-          </Button>
+          <button>Login</button>
         </form>
         <span>
           If you do not have an account you can register{" "}
