@@ -19,14 +19,11 @@ const SignUp = () => {
     }
 
     try {
-      const result = await fetch(
-        `${process.env.NEXTAUTH_URL}/api/auth/signup`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, name, lastName, password }),
-        }
-      );
+      const result = await fetch(`/api/auth/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, name, lastName, password }),
+      });
       const response = await result.json();
 
       if (response && result.status === 200) {
