@@ -16,14 +16,11 @@ export const authOptions = {
         },
       },
       async authorize(credentials) {
-        const result = await fetch(
-          `${process.env.NEXTAUTH_URL}/api/auth/login`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(credentials),
-          }
-        );
+        const result = await fetch(`/api/auth/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(credentials),
+        });
         const response = await result.json();
 
         if (result.status === 200 && response.user) {
