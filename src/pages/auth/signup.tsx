@@ -115,7 +115,7 @@ const SignUp = () => {
             />
           </Grid>
           <Grid xs={2}>
-            <button>Login</button>
+            <button>Sign Up</button>
           </Grid>
         </form>
       </Grid.Container>

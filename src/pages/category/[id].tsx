@@ -7,7 +7,6 @@ export default function Category({ category5 }: any) {
   const {
     query: { id },
   } = useRouter();
-  const router = useRouter();
 
   const title = `${id}`?.charAt(0).toUpperCase() + id?.slice(1);
 
@@ -17,7 +16,7 @@ export default function Category({ category5 }: any) {
       <h1 style={{ display: "flex", justifyContent: "center" }}>{title}</h1>
       <div style={{ display: "flex", justifyContent: "center" }}>
         {category5.map((quotes: any) => {
-          return <Card key={quotes.id} quotes={quotes} categoryId={id} />;
+          return <Card key={quotes.id} quotes={quotes} />;
         })}
       </div>
 

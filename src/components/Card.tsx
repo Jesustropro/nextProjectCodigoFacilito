@@ -3,12 +3,12 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-export default function CardQuote({ quotes, categoryId, likedPost }: any) {
+export default function CardQuote({ quotes, likedPost }: any) {
   const { data: session, update }: any = useSession();
   const [alreadyLike, setAlreadyLike] = useState(false);
   const { author, content, tags } = quotes;
 
-  const liked = async (quotes: any, categoryId: any) => {
+  const liked = async (quotes: any) => {
     async function updateSession() {
       await update({
         ...session,
@@ -77,10 +77,10 @@ export default function CardQuote({ quotes, categoryId, likedPost }: any) {
                     weight="bold"
                     transform="uppercase"
                     onClick={() => {
-                      liked(quotes, categoryId);
+                      liked(quotes);
                     }}
                   >
-                    Like
+                    {alreadyLike ? "Liked" : "Like"}
                   </Text>
                 </Button>
               </Row>

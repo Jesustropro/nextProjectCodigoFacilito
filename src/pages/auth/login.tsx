@@ -32,13 +32,22 @@ const Login = () => {
   };
   return (
     <>
-      <NavBar />
+      <NavBar />{" "}
+      <h1
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          paddingTop: "4rem",
+        }}
+      >
+        Log In
+      </h1>
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          height: "70vh",
+          height: "50vh",
           justifyContent: "center",
         }}
       >
@@ -67,7 +76,7 @@ const Login = () => {
               size="lg"
               required={true}
             />
-            <button style={{ marginLeft: "0.5rem" }}>Login</button>
+            <button style={{ marginLeft: "0.5rem" }}>Log In</button>
           </div>
         </form>
         <span>
