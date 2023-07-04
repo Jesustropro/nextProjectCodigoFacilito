@@ -2,6 +2,7 @@ import NavBar from "../components/NavBar";
 import fetcher from "@/utils/fetcher";
 import Card from "../components/Card";
 import Link from "next/link";
+
 export default function Home({ only5 }: any) {
   return (
     <>

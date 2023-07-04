@@ -34,7 +34,7 @@ export default function CardQuote({ quotes, likedPost }: any) {
     <Card css={{ mw: "330px", margin: 2, marginTop: 10 }}>
       <Card.Header>
         <Text b>
-          {tags.length > 1
+          {tags?.length > 1
             ? tags.map((tag: any) => {
                 return `  ${tag}  `;
               })
