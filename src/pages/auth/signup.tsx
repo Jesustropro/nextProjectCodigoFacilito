@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { Modal, Button, Text, Input, Row, Checkbox } from "@nextui-org/react";
+import { Modal, Button, Text, Input, Grid } from "@nextui-org/react";
 import NavBar from "@/components/NavBar";
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -51,58 +51,74 @@ const SignUp = () => {
   return (
     <>
       <NavBar />
-      <form onSubmit={handlerSubmitForm} style={{ marginTop: 40 }}>
-        <Input
-          onChange={(e) => {
-            setName(e.target.value);
-          }}
-          labelPlaceholder="First name"
-          value={name}
-          size="lg"
-          required={true}
-        />
-
-        <Input
-          onChange={(e) => {
-            setLastName(e.target.value);
-          }}
-          labelPlaceholder="LastName"
-          value={lastName}
-          size="lg"
-          required={true}
-        />
-
-        <Input
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
-          labelPlaceholder="Email"
-          type="email"
-          value={email}
-          size="lg"
-        />
-
-        <Input.Password
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-          value={password}
-          labelPlaceholder="Password"
-          size="lg"
-        />
-
-        <Input.Password
-          onChange={(e) => {
-            setRepeatPassword(e.target.value);
-          }}
-          value={repeatPassword}
-          labelPlaceholder="Repeat password"
-          size="lg"
-        />
-
-        <button>Login</button>
-      </form>
-
+      <h1
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        Sign Up
+      </h1>
+      <Grid.Container gap={3} justify="center">
+        <form onSubmit={handlerSubmitForm} style={{ marginTop: 40 }}>
+          <Grid xs={10}>
+            <Input
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+              labelPlaceholder="First name"
+              value={name}
+              size="lg"
+              required={true}
+            />
+          </Grid>
+          <Grid xs={10}>
+            <Input
+              onChange={(e) => {
+                setLastName(e.target.value);
+              }}
+              labelPlaceholder="LastName"
+              value={lastName}
+              size="lg"
+              required={true}
+            />
+          </Grid>
+          <Grid xs={12}>
+            <Input
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+              labelPlaceholder="Email"
+              type="email"
+              value={email}
+              size="lg"
+            />
+          </Grid>
+          <Grid xs={10}>
+            <Input.Password
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              value={password}
+              labelPlaceholder="Password"
+              size="lg"
+            />
+          </Grid>
+          <Grid xs={10}>
+            <Input.Password
+              onChange={(e) => {
+                setRepeatPassword(e.target.value);
+              }}
+              value={repeatPassword}
+              labelPlaceholder="Repeat password"
+              size="lg"
+            />
+          </Grid>
+          <Grid xs={2}>
+            <button>Login</button>
+          </Grid>
+        </form>
+      </Grid.Container>
       {error && (
         <div>
           <Modal

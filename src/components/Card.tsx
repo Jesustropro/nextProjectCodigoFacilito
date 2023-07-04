@@ -68,7 +68,7 @@ export default function CardQuote({ quotes, categoryId, likedPost }: any) {
                   flat
                   auto
                   rounded
-                  color="error"
+                  color={"error"}
                   disabled={alreadyLike ? true : false}
                 >
                   <Text

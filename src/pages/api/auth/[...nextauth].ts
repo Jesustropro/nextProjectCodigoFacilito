@@ -25,7 +25,6 @@ export const authOptions = {
           }
         );
         const response = await result.json();
-
         if (result.status === 200 && response.user) {
           return response.user;
         } else {

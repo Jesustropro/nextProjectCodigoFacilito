@@ -1,10 +1,8 @@
 import NavBar from "../components/NavBar";
 import fetcher from "@/utils/fetcher";
 import Card from "../components/Card";
-import { useRouter } from "next/router";
+import Link from "next/link";
 export default function Home({ only5 }: any) {
-  const router = useRouter();
-
   return (
     <>
       <NavBar />
@@ -24,12 +22,10 @@ export default function Home({ only5 }: any) {
           return <Card key={quotes._id} quotes={quotes} />;
         })}
       </div>
-      <button
-        onClick={() => {
-          router.push(`/`);
-        }}
-      >
-        refresh
+      <button>
+        <Link style={{ color: "white" }} href={"/"}>
+          Refresh
+        </Link>
       </button>
     </>
   );

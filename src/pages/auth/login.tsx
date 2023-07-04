@@ -21,7 +21,9 @@ const Login = () => {
         router.push("/");
       } else {
         setVisible(true);
-        setError("Check your email and password");
+        setError(
+          "Have you created a user yet? if you already did it then check your email and password"
+        );
       }
     });
   };
@@ -41,28 +43,32 @@ const Login = () => {
         }}
       >
         <form onSubmit={handlerSubmitForm}>
-          <Input
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-            labelPlaceholder="Email"
-            value={email}
-            size="lg"
-            type="email"
-            required={true}
-          />
+          <div style={{ marginBottom: "2rem" }}>
+            <Input
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+              labelPlaceholder="Email"
+              value={email}
+              size="lg"
+              type="email"
+              required={true}
+            />
+          </div>
           {"              "}
-          <Input.Password
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-            value={password}
-            type="password"
-            labelPlaceholder="Password"
-            size="lg"
-            required={true}
-          />
-          <button>Login</button>
+          <div style={{ marginBottom: "2rem" }}>
+            <Input.Password
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              value={password}
+              type="password"
+              labelPlaceholder="Password"
+              size="lg"
+              required={true}
+            />
+            <button style={{ marginLeft: "0.5rem" }}>Login</button>
+          </div>
         </form>
         <span>
           If you do not have an account you can register{" "}
