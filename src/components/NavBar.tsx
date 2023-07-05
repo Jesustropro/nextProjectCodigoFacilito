@@ -53,7 +53,7 @@ export default function NavBar() {
                 as="button"
                 color="secondary"
                 size="md"
-                src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                src="https://paperboogie.com/wp-content/uploads/2020/11/como-ordeno-mis-libros-150x150.jpg"
               />
             </Dropdown.Trigger>
           </Navbar.Item>

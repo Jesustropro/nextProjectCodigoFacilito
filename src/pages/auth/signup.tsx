@@ -13,9 +13,7 @@ const SignUp = () => {
   const handlerSubmitForm = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    console.log(password);
     if (password.length > 2) {
-      console.log("tiene mas de 2");
       if (password !== repeatPassword) {
         setError("Your passwords do not match, please try again.");
         setVisible(true);

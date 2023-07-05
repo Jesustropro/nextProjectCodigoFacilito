@@ -43,7 +43,6 @@ export default function CardQuote({ quotes, likedPost }: any) {
       } catch (error) {
         console.error(error);
       }
-      console.log(filteredLikes);
     } else {
       try {
         const result = await fetch(`/api/auth/liked?id=${session?.user?._id}`, {
@@ -98,15 +97,15 @@ export default function CardQuote({ quotes, likedPost }: any) {
                   rounded
                   color={"error"}
                   disabled={alreadyLike ? true : false}
+                  onClick={() => {
+                    liked(quotes, { dislike: null });
+                  }}
                 >
                   <Text
                     css={{ color: "inherit" }}
                     size={12}
                     weight="bold"
                     transform="uppercase"
-                    onClick={() => {
-                      liked(quotes, { dislike: null });
-                    }}
                   >
                     {alreadyLike ? "Liked" : "Like"}
                   </Text>
@@ -118,15 +117,20 @@ export default function CardQuote({ quotes, likedPost }: any) {
           {likedPost && (
             <Col>
               <Row justify="flex-end">
-                <Button flat auto rounded color={"secondary"}>
+                <Button
+                  flat
+                  auto
+                  rounded
+                  color={"secondary"}
+                  onClick={() => {
+                    liked(quotes, { dislike: true });
+                  }}
+                >
                   <Text
                     css={{ color: "inherit" }}
                     size={12}
                     weight="bold"
                     transform="uppercase"
-                    onClick={() => {
-                      liked(quotes, { dislike: true });
-                    }}
                   >
                     Dislike
                   </Text>

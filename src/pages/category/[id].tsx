@@ -13,8 +13,12 @@ export default function Category({ category5 }: any) {
   return (
     <>
       <NavBar />
-      <h1 style={{ display: "flex", justifyContent: "center" }}>{title}</h1>
-      <div style={{ display: "flex", justifyContent: "center" }}>
+      <h1
+        style={{ display: "flex", justifyContent: "center" }}
+      >{`${title} Quotes`}</h1>
+      <div
+        style={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}
+      >
         {category5.map((quotes: any) => {
           return <Card key={quotes.id} quotes={quotes} />;
         })}
