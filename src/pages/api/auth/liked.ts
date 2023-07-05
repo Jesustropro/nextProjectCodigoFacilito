@@ -16,16 +16,27 @@ export default async function handler(
     const { quotes, likes } = req.body;
 
     const idString = id?.toString().trim();
-
-    const post = await db.collection("users").updateOne(
-      { _id: new ObjectId(idString) },
-      {
-        $set: {
-          likes: [...likes, quotes],
-        },
-      }
-    );
-    res.json(post);
+    if (quotes !== null) {
+      const post = await db.collection("users").updateOne(
+        { _id: new ObjectId(idString) },
+        {
+          $set: {
+            likes: [...likes, quotes],
+          },
+        }
+      );
+      res.json(post);
+    } else {
+      const post = await db.collection("users").updateOne(
+        { _id: new ObjectId(idString) },
+        {
+          $set: {
+            likes: [...likes],
+          },
+        }
+      );
+      res.json(post);
+    }
   } catch (e) {
     console.error(e);
     res.status(500).json({

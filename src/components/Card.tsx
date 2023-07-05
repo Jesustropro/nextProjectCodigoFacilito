@@ -1,6 +1,6 @@
 import { Card, Col, Text, Button, Row } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+
 import { useState } from "react";
 
 export default function CardQuote({ quotes, likedPost }: any) {
@@ -8,26 +8,54 @@ export default function CardQuote({ quotes, likedPost }: any) {
   const [alreadyLike, setAlreadyLike] = useState(false);
   const { author, content, tags } = quotes;
 
-  const liked = async (quotes: any) => {
-    async function updateSession() {
-      await update({
-        ...session,
-        user: {
-          ...session?.user,
-          likes: [...session.user.likes, quotes],
-        },
-      });
+  const liked = async (quotes: any, { dislike }: any) => {
+    const filteredLikes = session?.user?.likes.filter(
+      (likes: any) => likes._id !== quotes._id
+    );
+
+    async function updateSession({ deleteLike }: any) {
+      if (deleteLike === null) {
+        await update({
+          ...session,
+          user: {
+            ...session?.user,
+            likes: [...session.user.likes, quotes],
+          },
+        });
+      } else {
+        await update({
+          ...session,
+          user: {
+            ...session?.user,
+            likes: [...filteredLikes],
+          },
+        });
+      }
     }
-    try {
-      const result = await fetch(`/api/auth/liked?id=${session?.user?._id}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ quotes, likes: session?.user?.likes }),
-      });
-      updateSession();
-      setAlreadyLike(true);
-    } catch (error) {
-      console.error(error);
+    if (dislike) {
+      try {
+        const result = await fetch(`/api/auth/liked?id=${session?.user?._id}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ quotes: null, likes: filteredLikes }),
+        });
+        updateSession({ deleteLike: true });
+      } catch (error) {
+        console.error(error);
+      }
+      console.log(filteredLikes);
+    } else {
+      try {
+        const result = await fetch(`/api/auth/liked?id=${session?.user?._id}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ quotes, likes: session?.user?.likes }),
+        });
+        updateSession({ deleteLike: null });
+        setAlreadyLike(true);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
   return (
@@ -77,10 +105,30 @@ export default function CardQuote({ quotes, likedPost }: any) {
                     weight="bold"
                     transform="uppercase"
                     onClick={() => {
-                      liked(quotes);
+                      liked(quotes, { dislike: null });
                     }}
                   >
                     {alreadyLike ? "Liked" : "Like"}
+                  </Text>
+                </Button>
+              </Row>
+            </Col>
+          )}
+
+          {likedPost && (
+            <Col>
+              <Row justify="flex-end">
+                <Button flat auto rounded color={"secondary"}>
+                  <Text
+                    css={{ color: "inherit" }}
+                    size={12}
+                    weight="bold"
+                    transform="uppercase"
+                    onClick={() => {
+                      liked(quotes, { dislike: true });
+                    }}
+                  >
+                    Dislike
                   </Text>
                 </Button>
               </Row>
