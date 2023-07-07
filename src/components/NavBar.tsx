@@ -1,14 +1,28 @@
-import { Navbar, Link, Text, Avatar, Dropdown } from "@nextui-org/react";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { Navbar, Link, Text, Avatar, Dropdown, Input } from "@nextui-org/react";
+import { useSession, signOut } from "next-auth/react";
 
 import { useRouter } from "next/router";
 
 export default function NavBar() {
   const router = useRouter();
+  const {
+    query: { id },
+  } = useRouter();
+  console.log(id);
   const { data: session } = useSession();
+  const collapseItems = [
+    "Random",
+    "Wisdom",
+    "Love",
+    "Inspirational",
+    "Humorous",
+    "History",
+    "Philosophy",
+  ];
 
   return (
     <Navbar isBordered variant="sticky">
+      <Navbar.Toggle showIn="xs" />
       <Navbar.Brand
         css={{
           "@xs": {
@@ -16,7 +30,12 @@ export default function NavBar() {
           },
         }}
       >
-        <Text onClick={() => router.push("/")} b color="inherit">
+        <Text
+          onClick={() => router.push("/")}
+          b
+          color="inherit"
+          style={{ cursor: "pointer" }}
+        >
           YouReadIt?
         </Text>
       </Navbar.Brand>
@@ -26,17 +45,32 @@ export default function NavBar() {
         hideIn="xs"
         variant="highlight-rounded"
       >
-        <Navbar.Link onClick={() => router.push("/")}>Random</Navbar.Link>
-        <Navbar.Link onClick={() => router.push("/category/wisdom")}>
+        <Navbar.Link
+          isActive={id === undefined}
+          onClick={() => router.push("/")}
+        >
+          Random
+        </Navbar.Link>
+        <Navbar.Link
+          isActive={id === "wisdom"}
+          onClick={() => router.push("/category/wisdom")}
+        >
           Wisdom
         </Navbar.Link>
-        <Navbar.Link onClick={() => router.push("/category/love")}>
+        <Navbar.Link
+          isActive={id === "love"}
+          onClick={() => router.push("/category/love")}
+        >
           Love
         </Navbar.Link>
-        <Navbar.Link onClick={() => router.push("/category/inspirational")}>
+        <Navbar.Link
+          isActive={id === "inspirational"}
+          onClick={() => router.push("/category/inspirational")}
+        >
           Inspirational
         </Navbar.Link>
       </Navbar.Content>
+
       <Navbar.Content
         css={{
           "@xs": {
@@ -88,6 +122,29 @@ export default function NavBar() {
           )}
         </Dropdown>
       </Navbar.Content>
+      <Navbar.Collapse>
+        {collapseItems.map((item, index) => (
+          <Navbar.CollapseItem
+            key={item}
+            activeColor="secondary"
+            isActive={id !== undefined ? item === id : index === 0}
+          >
+            <Link
+              color="inherit"
+              css={{
+                minWidth: "100%",
+              }}
+              onClick={() => {
+                item !== "Random"
+                  ? router.push(`/category/${item}`)
+                  : router.push("/");
+              }}
+            >
+              {item}
+            </Link>
+          </Navbar.CollapseItem>
+        ))}
+      </Navbar.Collapse>
     </Navbar>
   );
 }
