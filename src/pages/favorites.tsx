@@ -23,7 +23,7 @@ export default function Favorites() {
             }}
           >
             {session?.user?.likes.map((quote: any) => {
-              return <Card key={quote._id} quotes={quote} likedPost={true} />;
+              return <Card key={quote._id} quotes={quote} />;
             })}
           </div>
         </>

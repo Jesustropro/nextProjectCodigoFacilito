@@ -1,12 +1,23 @@
 import { Card, Col, Text, Button, Row } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function CardQuote({ quotes, likedPost }: any) {
+export default function CardQuote({ quotes }: any) {
   const { data: session, update }: any = useSession();
   const [alreadyLike, setAlreadyLike] = useState(false);
   const { author, content, tags } = quotes;
+
+  useEffect(() => {
+    if (
+      session?.user?.likes.find(
+        (quoteLiked: any) => quoteLiked._id === quotes._id
+      )
+    ) {
+      return setAlreadyLike(true);
+    }
+    return setAlreadyLike(false);
+  }, [quotes, session?.user?.likes]);
 
   const liked = async (quotes: any, { dislike }: any) => {
     const filteredLikes = session?.user?.likes.filter(
@@ -14,7 +25,7 @@ export default function CardQuote({ quotes, likedPost }: any) {
     );
 
     async function updateSession({ deleteLike }: any) {
-      if (deleteLike === null) {
+      if (!deleteLike) {
         await update({
           ...session,
           user: {
@@ -40,6 +51,7 @@ export default function CardQuote({ quotes, likedPost }: any) {
           body: JSON.stringify({ quotes: null, likes: filteredLikes }),
         });
         updateSession({ deleteLike: true });
+        setAlreadyLike(false);
       } catch (error) {
         console.error(error);
       }
@@ -88,17 +100,18 @@ export default function CardQuote({ quotes, likedPost }: any) {
               {author}
             </Text>
           </Col>
-          {session && !likedPost && (
+          {session && (
             <Col>
               <Row justify="flex-end">
                 <Button
                   flat
                   auto
                   rounded
-                  color={"error"}
-                  disabled={alreadyLike ? true : false}
+                  color={alreadyLike ? "secondary" : "error"}
                   onClick={() => {
-                    liked(quotes, { dislike: null });
+                    alreadyLike
+                      ? liked(quotes, { dislike: true })
+                      : liked(quotes, { dislike: null });
                   }}
                 >
                   <Text
@@ -107,32 +120,7 @@ export default function CardQuote({ quotes, likedPost }: any) {
                     weight="bold"
                     transform="uppercase"
                   >
-                    {alreadyLike ? "Liked" : "Like"}
-                  </Text>
-                </Button>
-              </Row>
-            </Col>
-          )}
-
-          {likedPost && (
-            <Col>
-              <Row justify="flex-end">
-                <Button
-                  flat
-                  auto
-                  rounded
-                  color={"secondary"}
-                  onClick={() => {
-                    liked(quotes, { dislike: true });
-                  }}
-                >
-                  <Text
-                    css={{ color: "inherit" }}
-                    size={12}
-                    weight="bold"
-                    transform="uppercase"
-                  >
-                    Dislike
+                    {alreadyLike ? "Dislike" : "Like"}
                   </Text>
                 </Button>
               </Row>

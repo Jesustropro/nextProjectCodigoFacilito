@@ -8,16 +8,17 @@ export default function NavBar() {
   const {
     query: { id },
   } = useRouter();
-  console.log(id);
+
   const { data: session } = useSession();
   const collapseItems = [
     "Random",
     "Wisdom",
-    "Love",
+    "Friendship",
     "Inspirational",
     "Humorous",
     "History",
     "Philosophy",
+    "Love",
   ];
 
   return (
@@ -58,16 +59,22 @@ export default function NavBar() {
           Wisdom
         </Navbar.Link>
         <Navbar.Link
-          isActive={id === "love"}
-          onClick={() => router.push("/category/love")}
+          isActive={id === "friendship"}
+          onClick={() => router.push("/category/friendship")}
         >
-          Love
+          Friendship
         </Navbar.Link>
         <Navbar.Link
           isActive={id === "inspirational"}
           onClick={() => router.push("/category/inspirational")}
         >
           Inspirational
+        </Navbar.Link>
+        <Navbar.Link
+          isActive={id === "love"}
+          onClick={() => router.push("/category/love")}
+        >
+          Love
         </Navbar.Link>
       </Navbar.Content>
 
