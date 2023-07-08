@@ -143,9 +143,7 @@ ${author}`;
               <Col>
                 <Row justify="flex-end">
                   <Image
-                    src={
-                      alreadyLike ? "./icons/dislike.svg" : "/icons/like.svg"
-                    }
+                    src={alreadyLike ? "/icons/dislike.svg" : "/icons/like.svg"}
                     width={30}
                     height={30}
                     alt="icon like and dislike"
