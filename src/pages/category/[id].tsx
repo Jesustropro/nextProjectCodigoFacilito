@@ -23,12 +23,6 @@ export default function Category({ category5 }: any) {
           return <Card key={quotes.id} quotes={quotes} />;
         })}
       </div>
-
-      <button>
-        <Link style={{ color: "white" }} href={`/category/${id}`}>
-          Refresh
-        </Link>
-      </button>
     </>
   );
 }

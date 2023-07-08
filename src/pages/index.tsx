@@ -29,11 +29,6 @@ export default function Home({ only5 }: any) {
           return <Card key={quotes._id} quotes={quotes} />;
         })}
       </div>
-      <button>
-        <Link style={{ color: "white" }} href={"/"}>
-          Refresh
-        </Link>
-      </button>
     </>
   );
 }
