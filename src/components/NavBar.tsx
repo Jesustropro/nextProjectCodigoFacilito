@@ -1,6 +1,5 @@
 import { Navbar, Link, Text, Avatar, Dropdown, Input } from "@nextui-org/react";
 import { useSession, signOut } from "next-auth/react";
-
 import { useRouter } from "next/router";
 
 export default function NavBar() {
@@ -132,7 +131,7 @@ export default function NavBar() {
       <Navbar.Collapse>
         {collapseItems.map((item, index) => (
           <Navbar.CollapseItem
-            key={item}
+            key={item + index}
             activeColor="secondary"
             isActive={id !== undefined ? item === id : index === 0}
           >
