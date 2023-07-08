@@ -3,6 +3,8 @@ import { signIn, getSession } from "next-auth/react";
 import { Modal, Button, Text, Input, Row, Checkbox } from "@nextui-org/react";
 import NavBar from "@/components/NavBar";
 import { useRouter } from "next/router";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import NextLink from "next/link";
 const Login = () => {
   const router = useRouter();
@@ -18,6 +20,11 @@ const Login = () => {
       redirect: false,
     }).then((e) => {
       if (e?.status === 200) {
+        toast.success("Log In Correctly!", {
+          theme: "dark",
+          autoClose: 1000,
+          pauseOnHover: false,
+        });
         router.push("/");
       } else {
         setVisible(true);
@@ -32,7 +39,8 @@ const Login = () => {
   };
   return (
     <>
-      <NavBar />{" "}
+      <NavBar />
+      <ToastContainer />
       <h1
         style={{
           display: "flex",

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { Modal, Button, Text, Input, Grid } from "@nextui-org/react";
 import NavBar from "@/components/NavBar";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const SignUp = () => {
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -10,6 +12,7 @@ const SignUp = () => {
   const [repeatPassword, setRepeatPassword] = useState("");
   const [error, setError] = useState("");
   const [visible, setVisible] = useState(false);
+
   const handlerSubmitForm = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
@@ -31,6 +34,11 @@ const SignUp = () => {
           setVisible(true);
         }
         if (response && result.status === 200 && response.ok !== false) {
+          toast.success("SignIn In Correctly!", {
+            theme: "dark",
+            autoClose: 1000,
+            pauseOnHover: false,
+          });
           signIn();
         }
       } catch (error) {
@@ -49,6 +57,7 @@ const SignUp = () => {
   return (
     <>
       <NavBar />
+      <ToastContainer />
       <h1
         style={{
           display: "flex",
