@@ -2,9 +2,15 @@ import NavBar from "../components/NavBar";
 import Head from "next/head";
 import fetcher from "@/utils/fetcher";
 import Card from "../components/Card";
-import Link from "next/link";
-
+import { useState, useEffect } from "react";
 export default function Home({ only5 }: any) {
+  /*  const [numberQuotes, setNumberQuotes] = useState(5);
+  const numberSelect = (e: any) => {
+    setNumberQuotes(e.target.value);
+  };
+  useEffect(() => {
+    console.log(numberQuotes);
+  }, [numberQuotes]); */
   return (
     <>
       <Head>
@@ -22,6 +28,11 @@ export default function Home({ only5 }: any) {
       >
         Randoms Quotes
       </h1>
+      {/*  <select onChange={numberSelect}>
+        <option value={5}>Show 5</option>
+        <option value={10}>Show 10</option>
+        <option value={20}>Show 20</option>
+      </select>*/}
       <div
         style={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}
       >

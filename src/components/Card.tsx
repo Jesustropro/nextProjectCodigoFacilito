@@ -86,39 +86,24 @@ ${author}`;
                 })
               : tags[0]}
           </Text>
-          <Col style={{ width: "94%", position: "absolute" }}>
+          <Col>
             <Row justify="flex-end">
               <Image
-                src="/icons/copyToClipBoard.svg"
+                src={alreadyLike ? "/icons/dislike.svg" : "/icons/like.svg"}
                 width={30}
-                height={60}
-                alt="Copy to Clipboard"
+                height={30}
+                alt="icon like and dislike"
                 style={{ cursor: "pointer" }}
                 onClick={() => {
-                  navigator.clipboard.writeText(textToCopy);
-                  toast.info("Copied to your clipboard!", {
-                    theme: "dark",
-                    autoClose: 1000,
-                    pauseOnHover: false,
-                  });
+                  alreadyLike
+                    ? liked(quotes, { dislike: true })
+                    : liked(quotes, { dislike: null });
                 }}
               />
-
-              <a
-                target="_blank"
-                href={`https://twitter.com/intent/tweet?text=${textToCopy}`}
-              >
-                <Image
-                  src="/icons/twitter.svg"
-                  width={30}
-                  height={60}
-                  alt="icon Copy to Clipboard"
-                  style={{ cursor: "pointer", marginLeft: 4 }}
-                />
-              </a>
             </Row>
           </Col>
         </Card.Header>
+
         <Card.Divider />
         <Card.Body css={{ py: "$10" }}>
           <Text>{content}</Text>
@@ -143,17 +128,33 @@ ${author}`;
               <Col>
                 <Row justify="flex-end">
                   <Image
-                    src={alreadyLike ? "/icons/dislike.svg" : "/icons/like.svg"}
+                    src="/icons/copyToClipBoard.svg"
                     width={30}
                     height={30}
-                    alt="icon like and dislike"
+                    alt="Copy to Clipboard"
                     style={{ cursor: "pointer" }}
                     onClick={() => {
-                      alreadyLike
-                        ? liked(quotes, { dislike: true })
-                        : liked(quotes, { dislike: null });
+                      navigator.clipboard.writeText(textToCopy);
+                      toast.info("Copied to your clipboard!", {
+                        theme: "dark",
+                        autoClose: 1000,
+                        pauseOnHover: false,
+                      });
                     }}
                   />
+
+                  <a
+                    target="_blank"
+                    href={`https://twitter.com/intent/tweet?text=${textToCopy}`}
+                  >
+                    <Image
+                      src="/icons/twitter.svg"
+                      width={30}
+                      height={30}
+                      alt="icon Copy to Clipboard"
+                      style={{ cursor: "pointer", marginLeft: 4 }}
+                    />
+                  </a>
                 </Row>
               </Col>
             )}
