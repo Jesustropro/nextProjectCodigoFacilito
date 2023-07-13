@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { signIn, getSession } from "next-auth/react";
 import { Modal, Button, Text, Input, Row, Checkbox } from "@nextui-org/react";
-import NavBar from "@/components/NavBar";
+
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import NextLink from "next/link";
 const Login = () => {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [visible, setVisible] = useState(false);
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [visible, setVisible] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
   const handlerSubmitForm = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     signIn("credentials", {
@@ -39,7 +39,6 @@ const Login = () => {
   };
   return (
     <>
-      <NavBar />
       <ToastContainer />
       <h1
         style={{

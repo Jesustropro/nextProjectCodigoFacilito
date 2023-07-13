@@ -4,15 +4,25 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-export default function CardQuote({ quotes }: any) {
+
+interface QuoteParams {
+  quotes: {
+    _id: string;
+    author: string;
+    content: string;
+    tags: string[];
+  };
+}
+export default function CardQuote({ quotes }: QuoteParams) {
   const { data: session, update }: any = useSession();
   const [alreadyLike, setAlreadyLike] = useState(false);
+
   const { author, content, tags } = quotes;
 
   useEffect(() => {
     if (
       session?.user?.likes.find(
-        (quoteLiked: any) => quoteLiked._id === quotes._id
+        (quoteLiked: { _id: string }) => quoteLiked._id === quotes._id
       )
     ) {
       return setAlreadyLike(true);

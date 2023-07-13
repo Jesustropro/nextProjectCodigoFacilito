@@ -2,7 +2,7 @@ import { expect, it, vi, describe } from "vitest";
 import { NextRouter } from "next/router";
 import { render } from "@testing-library/react";
 import { SessionProvider } from "next-auth/react";
-import Home from "../src/pages/index";
+import Home from "../src/pages";
 
 import { RouterContext } from "next/dist/shared/lib/router-context";
 
@@ -17,7 +17,7 @@ describe("[ pages / Home (index) ]", () => {
     it("should render", (): void => {
       render(
         <SessionProvider>
-          <RouterContext.Provider value={<NextRouter /> } >
+          <RouterContext.Provider value={<NextRouter />}>
             <Home {...props} />
           </RouterContext.Provider>
         </SessionProvider>

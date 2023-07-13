@@ -1,14 +1,12 @@
-import NavBar from "@/components/NavBar";
 import { useSession } from "next-auth/react";
 import Card from "@/components/Card";
+import { QuotesTypes } from "./index";
 
 export default function Favorites() {
   const { data: session, update, status }: any = useSession();
 
   return (
     <>
-      <NavBar />
-
       {session ? (
         <>
           <h1 style={{ display: "flex", justifyContent: "center" }}>
@@ -22,7 +20,7 @@ export default function Favorites() {
               flexWrap: "wrap",
             }}
           >
-            {session?.user?.likes.map((quote: any) => {
+            {session?.user?.likes.map((quote: QuotesTypes) => {
               return <Card key={quote._id} quotes={quote} />;
             })}
           </div>

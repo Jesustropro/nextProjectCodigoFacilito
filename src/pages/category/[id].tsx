@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import NavBar from "@/components/NavBar";
 import fetcher from "@/utils/fetcher";
 import Card from "@/components/Card";
 import Link from "next/link";
@@ -12,7 +11,6 @@ export default function Category({ category5 }: any) {
 
   return (
     <>
-      <NavBar />
       <h1
         style={{ display: "flex", justifyContent: "center" }}
       >{`${title} Quotes`}</h1>

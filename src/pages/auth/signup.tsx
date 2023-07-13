@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { Modal, Button, Text, Input, Grid } from "@nextui-org/react";
-import NavBar from "@/components/NavBar";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const SignUp = () => {
-  const [name, setName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [repeatPassword, setRepeatPassword] = useState("");
-  const [error, setError] = useState("");
-  const [visible, setVisible] = useState(false);
+  const [name, setName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [repeatPassword, setRepeatPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
+  const [visible, setVisible] = useState<boolean>(false);
 
   const handlerSubmitForm = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -56,7 +56,6 @@ const SignUp = () => {
 
   return (
     <>
-      <NavBar />
       <ToastContainer />
       <h1
         style={{

@@ -8,6 +8,7 @@ export default function NavBar() {
     query: { id },
   } = useRouter();
 
+
   const { data: session } = useSession();
   const collapseItems = [
     "Random",
@@ -128,7 +129,21 @@ export default function NavBar() {
           )}
         </Dropdown>
       </Navbar.Content>
+
       <Navbar.Collapse>
+        <Navbar.CollapseItem>
+          <Link
+            color="inherit"
+            css={{
+              minWidth: "100%",
+            }}
+            onClick={() => {
+              router.push(`/category/authors`);
+            }}
+          >
+            Authors
+          </Link>
+        </Navbar.CollapseItem>
         {collapseItems.map((item, index) => (
           <Navbar.CollapseItem
             key={item + index}

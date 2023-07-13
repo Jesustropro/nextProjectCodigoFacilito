@@ -2,7 +2,7 @@ import type { AppProps } from "next/app";
 import { NextUIProvider } from "@nextui-org/react";
 import { createTheme } from "@nextui-org/react";
 import { SessionProvider } from "next-auth/react";
-
+import NavBar from "@/components/NavBar";
 const darkTheme = createTheme({
   type: "dark",
   theme: {
@@ -16,6 +16,7 @@ export default function App({
   return (
     <NextUIProvider theme={darkTheme}>
       <SessionProvider session={session}>
+        <NavBar />
         <Component {...pageProps} />
       </SessionProvider>
     </NextUIProvider>
