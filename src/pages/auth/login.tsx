@@ -12,7 +12,7 @@ const Login = () => {
   const [password, setPassword] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const handlerSubmitForm = (e: { preventDefault: () => void }) => {
+  const handlerSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     signIn("credentials", {
       email,

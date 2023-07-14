@@ -13,7 +13,7 @@ const SignUp = () => {
   const [error, setError] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
 
-  const handlerSubmitForm = async (e: { preventDefault: () => void }) => {
+  const handlerSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (password.length > 2) {

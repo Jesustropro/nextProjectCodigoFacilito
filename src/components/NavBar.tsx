@@ -8,7 +8,6 @@ export default function NavBar() {
     query: { id },
   } = useRouter();
 
-
   const { data: session } = useSession();
   const collapseItems = [
     "Random",
@@ -111,9 +110,14 @@ export default function NavBar() {
                   {`¡Hello ${session?.user?.name}!`}
                 </Text>
               </Dropdown.Item>
-              <Dropdown.Item key="analytics" withDivider>
+              <Dropdown.Item key="favorites" withDivider>
                 <Navbar.Link onClick={() => router.push("/favorites")}>
                   Favorites
+                </Navbar.Link>
+              </Dropdown.Item>
+              <Dropdown.Item key="myquotes" withDivider>
+                <Navbar.Link onClick={() => router.push("/myquotes")}>
+                  My quotes
                 </Navbar.Link>
               </Dropdown.Item>
               <Dropdown.Item key="logout" withDivider color="error">

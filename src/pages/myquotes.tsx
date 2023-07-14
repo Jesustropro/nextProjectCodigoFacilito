@@ -1,35 +1,78 @@
 import { Modal, Button, Text, Input, Textarea } from "@nextui-org/react";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
+import Card from "@/components/Card";
+import { QuotesTypes } from "./index";
+
 export default function MyQuotes() {
   const { data: session, update, status }: any = useSession();
   const [visible, setVisible] = useState<boolean>(false);
   const [author, setAuthor] = useState<string>("");
-  const [category, setCategory] = useState<string>("");
+  const [tags, setTags] = useState<string>("");
   const [quote, setQuote] = useState<string>("");
   const handler = () => setVisible(true);
 
-  const saveQuote = () => {
-    if (author.length > 0 && category.length > 0 && quote.length > 0) {
-      const quoteUser = {
-        author,
-        category,
-        quote,
-        _id: author + category + quote,
-      };
-      console.log(quoteUser);
+  const saveQuote = async () => {
+    console.log(session);
+    if (author.length > 0 && tags.length > 0 && quote.length > 0) {
+      try {
+        const result = await fetch(
+          `/api/auth/createquote?id=${session?.user?._id}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              quotes: {
+                author,
+                tags: [tags],
+                content: quote,
+                _id: author + tags + quote,
+              },
+              myquotes: session?.user?.myquotes,
+            }),
+          }
+        );
+
+        await update({
+          ...session,
+          user: {
+            ...session?.user,
+            myquotes: [
+              ...session.user.myquotes,
+              {
+                author,
+                tags: [tags],
+                content: quote,
+                _id: author + tags + quote,
+              },
+            ],
+          },
+        });
+        //     updateSession({ deleteLike: null });
+        //   setAlreadyLike(true);
+      } catch (error) {
+        console.error(error);
+      }
       setVisible(false);
       setAuthor("");
-      setCategory("");
+      setTags("");
       setQuote("");
     }
   };
 
   return (
     <>
-      <h1 style={{ display: "flex", justifyContent: "center" }}>My Quotes</h1>
+      <h1 style={{ display: "flex", justifyContent: "center" }}>
+        {session ? "My Quotes" : "Log in to see your quotes"}
+      </h1>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "end",
 
-      <div>
+          width: "90%",
+        }}
+      >
         <Button color="secondary" rounded flat auto onPress={handler}>
           Create a new quote
         </Button>
@@ -56,8 +99,8 @@ export default function MyQuotes() {
                 color="secondary"
                 size="lg"
                 labelPlaceholder="Category"
-                onChange={(e) => setCategory(e.target.value)}
-                value={category}
+                onChange={(e) => setTags(e.target.value)}
+                value={tags}
               />
             </div>
             <div style={{ marginTop: "17px" }}>
@@ -91,6 +134,19 @@ export default function MyQuotes() {
           </Modal.Footer>
         </Modal>
       </div>
+      {session?.user?.myquotes?.length > 0 && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          {session?.user?.myquotes.map((quote: QuotesTypes) => {
+            return <Card key={quote._id} quotes={quote} />;
+          })}
+        </div>
+      )}
     </>
   );
 }
