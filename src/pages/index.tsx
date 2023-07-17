@@ -15,6 +15,7 @@ export default function Home({ only5 }: { only5: [] }) {
   const refreshStorage = () => {
     localStorage.removeItem("quotes");
   };
+  setInterval(refreshStorage, 1000 * 60 * 60 * 24);
 
   useEffect(() => {
     if (localStorage.getItem("quotes") === null) {
