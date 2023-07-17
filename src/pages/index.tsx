@@ -2,8 +2,6 @@ import Head from "next/head";
 import fetcher from "@/utils/fetcher";
 import Card from "../components/Card";
 import { useEffect, useState } from "react";
-// import Push
-import Push from "push.js";
 
 export interface QuotesTypes {
   _id: string;
@@ -16,21 +14,7 @@ export default function Home({ only5 }: { only5: [] }) {
   const [readyQuotes, setReadyQuotes] = useState<QuotesTypes[]>([]);
   const refreshStorage = () => {
     localStorage.removeItem("quotes");
-    notify();
   };
-  const interval = setInterval(refreshStorage, 1000 * 60);
-  function notify() {
-    Push.create("Hola Jesus!", {
-      body: "Ya están disponibles las citas",
-      icon: "/favicon.ico",
-      timeout: 10000,
-      onClick: function () {
-        window.location.href =
-          "https://next-project-codigo-facilito.vercel.app/";
-        clearInterval(interval);
-      },
-    });
-  }
 
   useEffect(() => {
     if (localStorage.getItem("quotes") === null) {
