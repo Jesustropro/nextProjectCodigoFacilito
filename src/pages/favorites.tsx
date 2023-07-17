@@ -21,7 +21,9 @@ export default function Favorites() {
             }}
           >
             {session?.user?.likes.map((quote: QuotesTypes) => {
-              return <Card key={quote._id} quotes={quote} />;
+              return (
+                <Card key={quote._id} quotes={quote} deleteQuote={false} />
+              );
             })}
           </div>
         </>
