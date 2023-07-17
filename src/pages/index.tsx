@@ -8,6 +8,7 @@ export interface QuotesTypes {
   author: string;
   content: string;
   tags: string[];
+  deleteQuote: boolean;
 }
 
 export default function Home({ only5 }: { only5: [] }) {
@@ -46,7 +47,7 @@ export default function Home({ only5 }: { only5: [] }) {
         style={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}
       >
         {readyQuotes.map((quotes: QuotesTypes) => {
-          return <Card key={quotes._id} quotes={quotes} />;
+          return <Card key={quotes._id} quotes={quotes} deleteQuote={false} />;
         })}
       </div>
     </>

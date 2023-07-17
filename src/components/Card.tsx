@@ -13,10 +13,11 @@ interface QuoteParams {
     content: string;
     tags: string[];
   };
+  deleteQuote: boolean;
 }
-export default function CardQuote({ quotes }: QuoteParams) {
-  const [visible, setVisible] = useState<boolean>(false);
-  const handler = () => setVisible(true);
+export default function CardQuote({ quotes, deleteQuote }: QuoteParams) {
+  const [visibleDownload, setVisibleDownload] = useState<boolean>(false);
+  const handler = () => setVisibleDownload(true);
   const [colorShareCard, setColorSharedCard] = useState("white");
   const [fontColorSharedCard, setFontColorSharedCard] = useState("black");
   const menuSelectColorSharedCard = ["#6050DC", "#E48400", "#CDE1F3"];
@@ -52,6 +53,35 @@ export default function CardQuote({ quotes }: QuoteParams) {
     }
     return setAlreadyLike(false);
   }, [quotes, session?.user?.likes]);
+
+  const deleteMyQuote = async () => {
+    const filteredquotes = session?.user?.myquotes.filter(
+      (quotedeleted: any) => quotedeleted._id !== quotes._id
+    );
+    try {
+      const result = await fetch(
+        `/api/auth/createquote?id=${session?.user?._id}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            quotes: null,
+            myquotes: filteredquotes,
+          }),
+        }
+      );
+
+      await update({
+        ...session,
+        user: {
+          ...session?.user,
+          myquotes: [...filteredquotes],
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const liked = async (quotes: any, { dislike }: any) => {
     const filteredLikes = session?.user?.likes.filter(
@@ -112,8 +142,8 @@ ${author}`;
       <Modal
         blur
         aria-labelledby="modal-title"
-        open={visible}
-        onClose={() => setVisible(false)}
+        open={visibleDownload}
+        onClose={() => setVisibleDownload(false)}
       >
         <Modal.Body>
           <section
@@ -230,14 +260,19 @@ ${author}`;
           </button>
         </section>
         <Modal.Footer>
-          <Button auto flat color="error" onPress={() => setVisible(false)}>
+          <Button
+            auto
+            flat
+            color="error"
+            onPress={() => setVisibleDownload(false)}
+          >
             Close
           </Button>
           <Button
             auto
             color="secondary"
             onPress={() => {
-              setVisible(false);
+              setVisibleDownload(false);
               exportImage();
             }}
           >
@@ -257,18 +292,30 @@ ${author}`;
           {session && (
             <Col>
               <Row justify="flex-end">
-                <Image
-                  src={alreadyLike ? "/icons/dislike.svg" : "/icons/like.svg"}
-                  width={30}
-                  height={30}
-                  alt="icon like and dislike"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    alreadyLike
-                      ? liked(quotes, { dislike: true })
-                      : liked(quotes, { dislike: null });
-                  }}
-                />
+                {!deleteQuote && (
+                  <Image
+                    src={alreadyLike ? "/icons/dislike.svg" : "/icons/like.svg"}
+                    width={30}
+                    height={30}
+                    alt="icon like and dislike"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      alreadyLike
+                        ? liked(quotes, { dislike: true })
+                        : liked(quotes, { dislike: null });
+                    }}
+                  />
+                )}
+                {deleteQuote && (
+                  <Image
+                    src={"/icons/trash.svg"}
+                    width={30}
+                    height={30}
+                    alt="delete quote"
+                    style={{ cursor: "pointer" }}
+                    onClick={deleteMyQuote}
+                  />
+                )}
               </Row>
             </Col>
           )}
@@ -294,7 +341,7 @@ ${author}`;
                 {author}
               </Text>
             </Col>
-            {session && (
+            {session && !deleteQuote && (
               <Col>
                 <Row justify="flex-end">
                   <Image

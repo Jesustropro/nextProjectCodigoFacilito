@@ -10,6 +10,7 @@ export default function MyQuotes() {
   const [author, setAuthor] = useState<string>("");
   const [tags, setTags] = useState<string>("");
   const [quote, setQuote] = useState<string>("");
+  const [deleteQuote, setDeleteQuote] = useState<boolean>(false);
   const handler = () => setVisible(true);
 
   const saveQuote = async () => {
@@ -48,8 +49,6 @@ export default function MyQuotes() {
             ],
           },
         });
-        //     updateSession({ deleteLike: null });
-        //   setAlreadyLike(true);
       } catch (error) {
         console.error(error);
       }
@@ -58,7 +57,10 @@ export default function MyQuotes() {
       setTags("");
       setQuote("");
     }
+    setVisible(false);
   };
+
+  console.log(deleteQuote);
 
   return (
     <>
@@ -74,14 +76,31 @@ export default function MyQuotes() {
             width: "90%",
           }}
         >
-          <Button color="secondary" rounded flat auto onPress={handler}>
-            Create a new quote
-          </Button>
+          {deleteQuote === false && (
+            <Button color="secondary" rounded flat auto onPress={handler}>
+              Create a new quote
+            </Button>
+          )}
+          {session.user.myquotes.length > 0 ||
+          (session.user.myquotes.length === 0 && deleteQuote) ? (
+            <Button
+              color={!deleteQuote ? "error" : "success"}
+              rounded
+              flat
+              auto
+              onPress={() =>
+                deleteQuote ? setDeleteQuote(false) : setDeleteQuote(true)
+              }
+            >
+              {!deleteQuote ? "Delete Quote" : "Ready"}
+            </Button>
+          ) : null}
           <Modal
             closeButton
             aria-labelledby="modal-title"
             open={visible}
             onClose={saveQuote}
+            blur
           >
             <Modal.Header>
               <Text id="modal-title" size={18}>
@@ -145,7 +164,9 @@ export default function MyQuotes() {
           }}
         >
           {session?.user?.myquotes.map((quote: QuotesTypes) => {
-            return <Card key={quote._id} quotes={quote} />;
+            return (
+              <Card key={quote._id} quotes={quote} deleteQuote={deleteQuote} />
+            );
           })}
         </div>
       )}

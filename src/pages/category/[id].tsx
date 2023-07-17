@@ -15,11 +15,20 @@ export default function Category({ category5 }: any) {
         style={{ display: "flex", justifyContent: "center" }}
       >{`${title} Quotes`}</h1>
       <div
-        style={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}
+        style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}
       >
-        {category5.map((quotes: any) => {
-          return <Card key={quotes.id} quotes={quotes} />;
-        })}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            flexWrap: "wrap",
+            width: "80%",
+          }}
+        >
+          {category5.map((quotes: any) => {
+            return <Card key={quotes.id} quotes={quotes} deleteQuote={false} />;
+          })}
+        </div>
       </div>
     </>
   );
