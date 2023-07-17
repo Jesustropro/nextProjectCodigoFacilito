@@ -133,6 +133,7 @@ ${author}`;
               id={quotes._id}
               style={{
                 marginTop: "1rem",
+                paddingTop: "0.5rem",
                 backgroundColor: colorShareCard,
               }}
             >
@@ -162,7 +163,8 @@ ${author}`;
                 style={{
                   display: "flex",
                   justifyContent: "end",
-                  margin: "2rem",
+                  margin: "1rem",
+                  padding: "1rem",
                   fontFamily: "cursive",
                   color: fontColorSharedCard,
                 }}
