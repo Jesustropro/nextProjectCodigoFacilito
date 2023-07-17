@@ -10,7 +10,7 @@ export default function NavBar() {
 
   const { data: session } = useSession();
   const collapseItems = [
-    "Random",
+    "Quotes Of The Day",
     "Wisdom",
     "Friendship",
     "Inspirational",
@@ -18,6 +18,7 @@ export default function NavBar() {
     "History",
     "Philosophy",
     "Love",
+    "Motivational",
   ];
 
   return (
@@ -49,7 +50,7 @@ export default function NavBar() {
           isActive={id === undefined}
           onClick={() => router.push("/")}
         >
-          Random
+          Quotes Of The Day
         </Navbar.Link>
         <Navbar.Link
           isActive={id === "wisdom"}
@@ -135,7 +136,6 @@ export default function NavBar() {
       </Navbar.Content>
 
       <Navbar.Collapse>
- 
         {collapseItems.map((item, index) => (
           <Navbar.CollapseItem
             key={item + index}
@@ -148,7 +148,7 @@ export default function NavBar() {
                 minWidth: "100%",
               }}
               onClick={() => {
-                item !== "Random"
+                item !== "Quotes Of The Day"
                   ? router.push(`/category/${item}`)
                   : router.push("/");
               }}

@@ -19,13 +19,7 @@ export default function CardQuote({ quotes }: QuoteParams) {
   const handler = () => setVisible(true);
   const [colorShareCard, setColorSharedCard] = useState("white");
   const [fontColorSharedCard, setFontColorSharedCard] = useState("black");
-  const menuSelectColorSharedCard = [
-    "#6050DC",
-
-    "#E48400",
-    "#CDE1F3",
-    "#230b23 ",
-  ];
+  const menuSelectColorSharedCard = ["#6050DC", "#E48400", "#CDE1F3"];
 
   const { data: session, update }: any = useSession();
   const [alreadyLike, setAlreadyLike] = useState(false);
@@ -40,7 +34,6 @@ export default function CardQuote({ quotes }: QuoteParams) {
 
         link.download = `${author}-${tags[0]}.png`;
         //remove backgound image
-        canvas.style.background = "transparent";
 
         link.href = canvas.toDataURL();
         link.click();
