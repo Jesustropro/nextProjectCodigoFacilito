@@ -1,4 +1,3 @@
-import NavBar from "../components/NavBar";
 import Head from "next/head";
 import fetcher from "@/utils/fetcher";
 import Card from "../components/Card";
