@@ -6,16 +6,23 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import html2canvas from "html2canvas";
 import style from "./card.module.css";
+import { useRouter } from "next/router";
+
 interface QuoteParams {
   quotes: {
     _id: string;
     author: string;
     content: string;
     tags: string[];
+    likesCount?: number;
   };
   deleteQuote: boolean;
 }
 export default function CardQuote({ quotes, deleteQuote }: QuoteParams) {
+  const {
+    query: { id },
+  } = useRouter();
+  const router = useRouter();
   const [visibleDownload, setVisibleDownload] = useState<boolean>(false);
   const handler = () => setVisibleDownload(true);
   const [colorShareCard, setColorSharedCard] = useState("white");
@@ -25,7 +32,8 @@ export default function CardQuote({ quotes, deleteQuote }: QuoteParams) {
   const { data: session, update }: any = useSession();
   const [alreadyLike, setAlreadyLike] = useState(false);
 
-  const { author, content, tags } = quotes;
+  const { author, content, tags, likesCount, _id } = quotes;
+  const [countLikes, setCountLikes] = useState(likesCount);
   const exportImage = () => {
     return html2canvas(document.getElementById(`${quotes._id}`)!).then(
       (canvas) => {
@@ -49,9 +57,10 @@ export default function CardQuote({ quotes, deleteQuote }: QuoteParams) {
         (quoteLiked: { _id: string }) => quoteLiked._id === quotes._id
       )
     ) {
-      return setAlreadyLike(true);
+      return setAlreadyLike(true), setCountLikes(likesCount);
     }
-    return setAlreadyLike(false);
+
+    return setAlreadyLike(false), setCountLikes(likesCount);
   }, [quotes, session?.user?.likes]);
 
   const deleteMyQuote = async () => {
@@ -84,6 +93,21 @@ export default function CardQuote({ quotes, deleteQuote }: QuoteParams) {
   };
 
   const liked = async (quotes: any, { dislike }: any) => {
+    if ((countLikes || countLikes === 0) && !dislike) {
+      setCountLikes(countLikes + 1);
+      //update likescount
+      try {
+        const result = await fetch(`/api/auth/quotes?id=${_id}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ quotes, countLikes: 1 }),
+        });
+        quotes.likesCount = quotes.likesCount + 1;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
     const filteredLikes = session?.user?.likes.filter(
       (likes: any) => likes._id !== quotes._id
     );
@@ -108,6 +132,19 @@ export default function CardQuote({ quotes, deleteQuote }: QuoteParams) {
       }
     }
     if (dislike) {
+      if (countLikes && countLikes > 0) {
+        setCountLikes(countLikes - 1);
+        try {
+          const result = await fetch(`/api/auth/quotes?id=${_id}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ quotes, countLikes: -1 }),
+          });
+          quotes.likesCount = quotes.likesCount - 1;
+        } catch (error) {
+          console.error(error);
+        }
+      }
       try {
         const result = await fetch(`/api/auth/liked?id=${session?.user?._id}`, {
           method: "POST",
@@ -138,7 +175,6 @@ ${author}`;
 
   return (
     <>
-      <ToastContainer />
       <Modal
         blur
         aria-labelledby="modal-title"
@@ -293,24 +329,39 @@ ${author}`;
             <Col>
               <Row justify="flex-end">
                 {!deleteQuote && (
-                  <Image
-                    src={alreadyLike ? "/icons/dislike.svg" : "/icons/like.svg"}
-                    width={30}
-                    height={30}
-                    alt="icon like and dislike"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      alreadyLike
-                        ? liked(quotes, { dislike: true })
-                        : liked(quotes, { dislike: null });
-                    }}
-                  />
+                  <>
+                    <Image
+                      src={
+                        alreadyLike ? "/icons/dislike.svg" : "/icons/like.svg"
+                      }
+                      width={25}
+                      height={25}
+                      alt="icon like and dislike"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        alreadyLike
+                          ? liked(quotes, { dislike: true })
+                          : liked(quotes, { dislike: null });
+                      }}
+                    />
+                    <p
+                      style={{
+                        marginLeft: "10px",
+                        fontSize: "15px",
+                        color: "#fff",
+                        fontWeight: "bold",
+                        fontFamily: "cursive",
+                      }}
+                    >
+                      {countLikes !== 0 && countLikes}
+                    </p>
+                  </>
                 )}
                 {deleteQuote && (
                   <Image
                     src={"/icons/trash.svg"}
-                    width={30}
-                    height={30}
+                    width={25}
+                    height={25}
                     alt="delete quote"
                     style={{ cursor: "pointer" }}
                     onClick={deleteMyQuote}
@@ -347,15 +398,15 @@ ${author}`;
                   <Image
                     onClick={handler}
                     src="/icons/download.svg"
-                    width={30}
-                    height={29}
+                    width={25}
+                    height={24}
                     alt="Copy to Clipboard"
                     style={{ cursor: "pointer" }}
                   />
                   <Image
                     src="/icons/copyToClipBoard.svg"
-                    width={30}
-                    height={30}
+                    width={25}
+                    height={25}
                     alt="Copy to Clipboard"
                     style={{ cursor: "pointer" }}
                     onClick={() => {
@@ -373,8 +424,8 @@ ${author}`;
                   >
                     <Image
                       src="/icons/twitter.svg"
-                      width={30}
-                      height={30}
+                      width={25}
+                      height={25}
                       alt="icon Copy to Clipboard"
                       style={{ cursor: "pointer", marginLeft: 4 }}
                     />

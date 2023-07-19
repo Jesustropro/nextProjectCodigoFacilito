@@ -1,7 +1,9 @@
 import Head from "next/head";
-import fetcher from "@/utils/fetcher";
 import Card from "../components/Card";
 import { useEffect, useState } from "react";
+import { Modal, Button, Text } from "@nextui-org/react";
+import Image from "next/image";
+import Link from "next/link";
 
 export interface QuotesTypes {
   _id: string;
@@ -9,23 +11,22 @@ export interface QuotesTypes {
   content: string;
   tags: string[];
   deleteQuote: boolean;
+  likesCount: number;
+  count: number;
 }
 
-export default function Home({ only5 }: { only5: [] }) {
-  const [readyQuotes, setReadyQuotes] = useState<QuotesTypes[]>([]);
-  const refreshStorage = () => {
-    localStorage.removeItem("quotes");
-  };
-  setInterval(refreshStorage, 1000 * 60 * 60 * 24);
+export default function Home({
+  topQuotes,
+  topAuthor,
+}: {
+  topQuotes: [];
+  topAuthor: [];
+}) {
+  const [visible, setVisible] = useState(true);
 
-  useEffect(() => {
-    if (localStorage.getItem("quotes") === null) {
-      localStorage.setItem("quotes", JSON.stringify(only5));
-      setReadyQuotes(only5);
-    } else {
-      setReadyQuotes(JSON.parse(localStorage.getItem("quotes")!));
-    }
-  }, [only5]);
+  const closeHandler = () => {
+    setVisible(false);
+  };
 
   return (
     <>
@@ -38,28 +39,186 @@ export default function Home({ only5 }: { only5: [] }) {
         style={{
           display: "flex",
           justifyContent: "center",
+          marginBottom: "3rem",
         }}
       >
-        Quotes Of The Day
+        Quotes Of the Day
       </h1>
-
-      <div
-        style={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}
+      <Modal
+        closeButton
+        preventClose
+        width="600px"
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+        open={visible}
+        onClose={closeHandler}
       >
-        {readyQuotes.map((quotes: QuotesTypes) => {
-          return <Card key={quotes._id} quotes={quotes} deleteQuote={false} />;
-        })}
-      </div>
+        <Modal.Header>
+          <Text id="modal-title" size={18}>
+            v0.4.7-beta changelog
+          </Text>
+        </Modal.Header>
+        <Modal.Body>
+          <Text id="modal-description">
+            Dear user, thank you for being part of the beta of this project!
+            <br />
+            We are sorry to inform you that due to recent changes the record of
+            likes has been lost
+            <br />
+            Changes: <br />
+            <ul style={{ listStyleType: "circle" }}>
+              <li>Now you can create your own quotes!</li>
+              <li>Now you can see quotes by author!</li>
+              <li>
+                Popularity:
+                <ul style={{ listStyleType: "circle" }}>
+                  <li>Now the likes accumulate and are visible!</li>
+                  <li>
+                    New top! quotes and authors will now be highlighted in the
+                    home
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            Known bugs:
+            <ul>
+              <li>
+                When touching a category the navbar does not close automatically
+              </li>
+            </ul>
+            We appreciate any bugs you can tell us about!
+            <br /> Thank you for continuing to use YouReadIt?
+          </Text>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button auto flat color="error" onPress={closeHandler}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <section
+        style={{
+          display: "flex",
+          width: "95%",
+          height: "95%",
+          margin: "auto",
+          flexWrap: "wrap",
+          justifyContent: "space-around",
+        }}
+      >
+        <div
+          style={{
+            width: "380px",
+            height: "380px",
+            borderRadius: "20px",
+            backgroundColor: "rgba(16,16,16)",
+            border: "1px white solid",
+            marginBottom: "1rem",
+          }}
+        >
+          <h2
+            style={{
+              paddingTop: "1rem",
+              display: "flex",
+              justifyContent: "center",
+              marginBottom: "8rem",
+            }}
+          >
+            Most Liked Quotes
+          </h2>
+          <div
+            style={{
+              height: "0%",
+              paddingTop: "1rem",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <div style={{ height: "0%" }}>
+              {topQuotes.map((quote: QuotesTypes) => (
+                <div key={quote._id} className="carousel__item">
+                  <Card quotes={quote} deleteQuote={false} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div
+          style={{
+            width: "380px",
+            height: "380px",
+            borderRadius: "20px",
+            backgroundColor: "rgba(16,16,16)",
+            border: "1px white solid",
+          }}
+        >
+          <h2
+            style={{
+              paddingTop: "1rem",
+              display: "flex",
+              justifyContent: "center",
+              marginBottom: "1rem",
+            }}
+          >
+            Authors
+          </h2>
+          <div
+            style={{
+              paddingTop: "1rem",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <div style={{ width: "80%" }}>
+              {topAuthor.map((quote: QuotesTypes) => (
+                <div key={quote._id}>
+                  <Link
+                    style={{ color: "white" }}
+                    href={`/category/author/${quote._id}`}
+                  >
+                    <h3
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-evenly",
+                      }}
+                    >
+                      {quote._id}
+                      <div>
+                        {quote.count}
+                        <Image
+                          src="/icons/dislike.svg"
+                          width={25}
+                          height={20}
+                          alt="icon heart"
+                        />
+                      </div>
+                    </h3>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
     </>
   );
 }
 
 export async function getServerSideProps() {
   try {
-    const only5: [] = await fetcher(`?limit=5`);
+    const res = await fetch(
+      "http://localhost:3000/api/auth/quotes?limit=9&top=1"
+    );
+    const resauthor = await fetch(
+      "http://localhost:3000/api/auth/quotes?limit=5&topAuthor=1"
+    );
+    const topAuthor = await resauthor.json();
+    const topQuotes = await res.json();
     return {
       props: {
-        only5,
+        topQuotes,
+        topAuthor,
       },
     };
   } catch (error) {

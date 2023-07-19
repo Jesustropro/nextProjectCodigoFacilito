@@ -48,6 +48,7 @@ export default async function handler(
           email,
           password: passwordHashing,
           likes: [],
+          myquotes: [],
         });
         res.status(200).json({ message: "Done!", newUser });
       });

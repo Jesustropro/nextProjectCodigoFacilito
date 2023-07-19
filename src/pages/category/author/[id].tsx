@@ -7,7 +7,6 @@ export default function Category({ category5 }: any) {
     query: { id },
   } = useRouter();
 
-  console.log(id);
   const title = `${id}`?.charAt(0).toUpperCase() + id?.slice(1);
 
   return (
@@ -36,12 +35,13 @@ export default function Category({ category5 }: any) {
 }
 export async function getServerSideProps(context: any) {
   try {
+    console.log(context.query.id);
     const title =
       `${context.query.id}`?.charAt(0).toUpperCase() +
       context.query.id?.slice(1);
 
     const res = await fetch(
-      `http://localhost:3000/api/auth/quotes?limit=5&tag=${title}`
+      `http://localhost:3000/api/auth/quotes?limit=5&author=${title}`
     );
     const category5 = await res.json();
 
