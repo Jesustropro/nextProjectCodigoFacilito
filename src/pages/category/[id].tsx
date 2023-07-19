@@ -7,7 +7,6 @@ export default function Category({ category5 }: any) {
     query: { id },
   } = useRouter();
 
-  console.log(id);
   const title = `${id}`?.charAt(0).toUpperCase() + id?.slice(1);
 
   return (

@@ -23,7 +23,7 @@ export default function NavBar() {
 
   return (
     <Navbar isBordered variant="sticky">
-      <Navbar.Toggle showIn="xs" />
+      <Navbar.Toggle id={"toggle"} showIn="xs" />
       <Navbar.Brand
         css={{
           "@xs": {
@@ -151,6 +151,7 @@ export default function NavBar() {
                 item !== "Quotes Of The Day"
                   ? router.push(`/category/${item}`)
                   : router.push("/");
+                document.getElementById("toggle")?.click();
               }}
             >
               {item}

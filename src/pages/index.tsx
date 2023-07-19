@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Card from "../components/Card";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Modal, Button, Text } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -78,12 +78,6 @@ export default function Home({
                     home
                   </li>
                 </ul>
-              </li>
-            </ul>
-            Known bugs:
-            <ul>
-              <li>
-                When touching a category the navbar does not close automatically
               </li>
             </ul>
             We appreciate any bugs you can tell us about!
