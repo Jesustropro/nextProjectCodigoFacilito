@@ -12,8 +12,6 @@ const darkTheme = createTheme({
   },
 });
 
-const string = "author/Alan%20Watts";
-
 export default function App({
   Component,
   pageProps: { session, ...pageProps },
