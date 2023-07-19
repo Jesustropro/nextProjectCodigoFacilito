@@ -210,12 +210,11 @@ export async function getServerSideProps() {
     const res = await fetch(
       `${process.env.NEXTAUTH_URL}/api/auth/quotes?limit=9&top=1`
     );
-    const topQuotes = await res.json();
     const resauthor = await fetch(
       `${process.env.NEXTAUTH_URL}/api/auth/quotes?limit=5&topAuthor=1`
     );
     const topAuthor = await resauthor.json();
-
+    const topQuotes = await res.json();
     return {
       props: {
         topQuotes,

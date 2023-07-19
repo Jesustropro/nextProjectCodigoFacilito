@@ -34,7 +34,6 @@ export default async function handler(
 
   const db = client.db("quotes");
 
-  //if topAuthor exist  filter by the authors who have more likes in their quotes
   if (topAuthor && limit) {
     const quotes = await db
       .collection("quotes")
@@ -46,6 +45,7 @@ export default async function handler(
       ])
       .toArray();
     res.status(200).json(quotes);
+    return;
   }
 
   //if top exist filter quotes with have more likesCount
@@ -57,6 +57,7 @@ export default async function handler(
       .limit(limitNum)
       .toArray();
     res.status(200).json(quotes);
+    return;
   }
 
   if (author && limit) {
@@ -66,6 +67,7 @@ export default async function handler(
       .limit(limitNum)
       .toArray();
     res.status(200).json(quotes);
+    return;
   }
 
   if (tag && limit) {
@@ -78,11 +80,13 @@ export default async function handler(
       ])
       .toArray();
     res.status(200).json(newQuotes);
+    return;
   } else {
     const newQuotes = await db
       .collection("quotes")
       .aggregate([{ $sample: { size: limitNum } }])
       .toArray();
     res.status(200).json(newQuotes);
+    return;
   }
 }
