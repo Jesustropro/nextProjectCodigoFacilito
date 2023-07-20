@@ -61,7 +61,7 @@ export default function CardQuote({ quotes, deleteQuote }: QuoteParams) {
     }
 
     return setAlreadyLike(false), setCountLikes(likesCount);
-  }, [quotes, session?.user?.likes]);
+  }, [quotes, session?.user?.likes, likesCount]);
 
   const deleteMyQuote = async () => {
     const filteredquotes = session?.user?.myquotes.filter(
