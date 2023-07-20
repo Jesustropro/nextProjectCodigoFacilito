@@ -142,6 +142,7 @@ export default function CardQuote({ quotes, deleteQuote }: QuoteParams) {
             body: JSON.stringify({ quotes, countLikes: -1 }),
           });
           quotes.likesCount = quotes.likesCount - 1;
+          return;
         }
 
         const result = await fetch(`/api/auth/liked?id=${session?.user?._id}`, {
