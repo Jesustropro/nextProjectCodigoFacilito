@@ -62,10 +62,14 @@ export default async function handler(
   }
 
   if (author && limit) {
+    //if author existe filter quotes with have the author and random
+
     const quotes = await db
       .collection("quotes")
-      .find({ author: author })
-      .limit(limitNum)
+      .aggregate([
+        { $match: { author: author } },
+        { $sample: { size: limitNum } },
+      ])
       .toArray();
     res.status(200).json(quotes);
     return;

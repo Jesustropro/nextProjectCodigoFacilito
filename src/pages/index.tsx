@@ -55,7 +55,7 @@ export default function Home({
       >
         <Modal.Header>
           <Text id="modal-title" size={18}>
-            v0.5.1-beta changelog
+            v0.5.2-beta changelog
           </Text>
         </Modal.Header>
         <Modal.Body>
