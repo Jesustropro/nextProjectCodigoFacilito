@@ -132,19 +132,21 @@ export default function CardQuote({ quotes, deleteQuote }: QuoteParams) {
       }
     }
     if (dislike) {
-      try {
-        if (countLikes && countLikes > 0) {
-          setCountLikes(countLikes - 1);
-
+      if (countLikes && countLikes > 0) {
+        setCountLikes(countLikes - 1);
+        try {
           const result = await fetch(`/api/auth/quotes?id=${_id}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ quotes, countLikes: -1 }),
           });
           quotes.likesCount = quotes.likesCount - 1;
-          return;
+        } catch (error) {
+          console.error(error);
         }
-
+        return;
+      }
+      try {
         const result = await fetch(`/api/auth/liked?id=${session?.user?._id}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
