@@ -25,7 +25,7 @@ export default async function handler(
           },
         }
       );
-      res.json(post);
+      return res.json(post);
     } else {
       const post = await db.collection("users").updateOne(
         { _id: new ObjectId(idString) },
@@ -35,7 +35,7 @@ export default async function handler(
           },
         }
       );
-      res.json(post);
+      return res.json(post);
     }
   } catch (e) {
     console.error(e);
