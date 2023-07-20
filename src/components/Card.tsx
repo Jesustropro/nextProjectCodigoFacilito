@@ -144,6 +144,7 @@ export default function CardQuote({ quotes, deleteQuote }: QuoteParams) {
         } catch (error) {
           console.error(error);
         }
+        return;
       }
       try {
         const result = await fetch(`/api/auth/liked?id=${session?.user?._id}`, {
@@ -153,6 +154,7 @@ export default function CardQuote({ quotes, deleteQuote }: QuoteParams) {
         });
         updateSession({ deleteLike: true });
         setAlreadyLike(false);
+        return;
       } catch (error) {
         console.error(error);
       }
@@ -165,9 +167,11 @@ export default function CardQuote({ quotes, deleteQuote }: QuoteParams) {
         });
         updateSession({ deleteLike: null });
         setAlreadyLike(true);
+        return;
       } catch (error) {
         console.error(error);
       }
+      return;
     }
   };
   const textToCopy = `"${content}" 
