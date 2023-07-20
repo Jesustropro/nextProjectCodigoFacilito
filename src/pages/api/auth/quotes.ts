@@ -23,6 +23,7 @@ export default async function handler(
         );
 
       res.status(200).json({ message: "ok" });
+      return;
       // return to the front end the updated likesCount
     } catch (error) {
       res.status(500).json({ error: "Error al actualizar likes" });
