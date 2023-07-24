@@ -55,7 +55,7 @@ export default function Home({
       >
         <Modal.Header>
           <Text id="modal-title" size={18}>
-            v0.5.2-beta changelog
+            v0.6.1-beta changelog
           </Text>
         </Modal.Header>
         <Modal.Body>
@@ -67,6 +67,7 @@ export default function Home({
             <br />
             Changes: <br />
             <ul style={{ listStyleType: "circle" }}>
+              <li>Now the quotes you write can be seen by other users!</li>
               <li> Fixed a bug that did not allow saving the likes</li>
               <li>Now you can create your own quotes!</li>
               <li>Now you can see quotes by author!</li>

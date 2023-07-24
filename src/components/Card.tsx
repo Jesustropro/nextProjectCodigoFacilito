@@ -17,8 +17,13 @@ interface QuoteParams {
     likesCount?: number;
   };
   deleteQuote: boolean;
+  setDeleteQuote?: (value: boolean) => void;
 }
-export default function CardQuote({ quotes, deleteQuote }: QuoteParams) {
+export default function CardQuote({
+  quotes,
+  deleteQuote,
+  setDeleteQuote,
+}: QuoteParams) {
   const {
     query: { id },
   } = useRouter();
@@ -37,16 +42,12 @@ export default function CardQuote({ quotes, deleteQuote }: QuoteParams) {
   const exportImage = () => {
     return html2canvas(document.getElementById(`${quotes._id}`)!).then(
       (canvas) => {
-        // download
-
         const link = document.createElement("a");
 
         link.download = `${author}-${tags[0]}.png`;
-        //remove backgound image
 
         link.href = canvas.toDataURL();
         link.click();
-        // save to local
       }
     );
   };
@@ -64,29 +65,19 @@ export default function CardQuote({ quotes, deleteQuote }: QuoteParams) {
   }, [quotes, session?.user?.likes, likesCount]);
 
   const deleteMyQuote = async () => {
-    const filteredquotes = session?.user?.myquotes.filter(
-      (quotedeleted: any) => quotedeleted._id !== quotes._id
-    );
     try {
+      setDeleteQuote && setDeleteQuote(false);
+
       const result = await fetch(
-        `/api/auth/createquote?id=${session?.user?._id}`,
+        `/api/auth/createquote?deleteQuote=${quotes._id}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             quotes: null,
-            myquotes: filteredquotes,
           }),
         }
       );
-
-      await update({
-        ...session,
-        user: {
-          ...session?.user,
-          myquotes: [...filteredquotes],
-        },
-      });
     } catch (error) {
       console.error(error);
     }

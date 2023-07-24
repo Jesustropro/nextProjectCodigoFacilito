@@ -19,6 +19,7 @@ export default function NavBar() {
     "Philosophy",
     "Love",
     "Motivational",
+    "Users",
   ];
 
   return (
@@ -75,6 +76,12 @@ export default function NavBar() {
           onClick={() => router.push("/category/love")}
         >
           Love
+        </Navbar.Link>
+        <Navbar.Link
+          isActive={id === "User"}
+          onClick={() => router.push("/category/users")}
+        >
+          Users
         </Navbar.Link>
       </Navbar.Content>
 

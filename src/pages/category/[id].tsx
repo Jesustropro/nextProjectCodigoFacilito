@@ -26,7 +26,9 @@ export default function Category({ category5 }: any) {
           }}
         >
           {category5.map((quotes: any) => {
-            return <Card key={quotes.id} quotes={quotes} deleteQuote={false} />;
+            return (
+              <Card key={quotes._id} quotes={quotes} deleteQuote={false} />
+            );
           })}
         </div>
       </div>

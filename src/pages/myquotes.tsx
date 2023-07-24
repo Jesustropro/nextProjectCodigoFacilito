@@ -1,5 +1,5 @@
 import { Modal, Button, Text, Input, Textarea } from "@nextui-org/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Card from "@/components/Card";
 import { QuotesTypes } from "./index";
@@ -11,10 +11,30 @@ export default function MyQuotes() {
   const [tags, setTags] = useState<string>("");
   const [quote, setQuote] = useState<string>("");
   const [deleteQuote, setDeleteQuote] = useState<boolean>(false);
+  const [myQuotes, setMyQuotes] = useState<QuotesTypes[]>([]);
   const handler = () => setVisible(true);
 
+  useEffect(() => {
+    if (session) {
+      const fetchQuotes = async () => {
+        const res = await fetch(
+          `/api/auth/createquote?myquote=${session.user.name}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              quotes: null,
+            }),
+          }
+        );
+        const data = await res.json();
+        setMyQuotes(data);
+      };
+      fetchQuotes();
+    }
+  }, [visible, session, session?.user, deleteQuote]);
+
   const saveQuote = async () => {
-    console.log(session);
     if (author.length > 0 && tags.length > 0 && quote.length > 0) {
       try {
         const result = await fetch(
@@ -25,30 +45,17 @@ export default function MyQuotes() {
             body: JSON.stringify({
               quotes: {
                 author,
-                tags: [tags],
+                tags: [tags, "Users"],
                 content: quote,
-                _id: author + tags + quote,
+                likesCount: 0,
+                creator: session?.user?.name,
               },
               myquotes: session?.user?.myquotes,
             }),
           }
         );
 
-        await update({
-          ...session,
-          user: {
-            ...session?.user,
-            myquotes: [
-              ...session.user.myquotes,
-              {
-                author,
-                tags: [tags],
-                content: quote,
-                _id: author + tags + quote,
-              },
-            ],
-          },
-        });
+        console.log(session.user);
       } catch (error) {
         console.error(error);
       }
@@ -59,8 +66,6 @@ export default function MyQuotes() {
     }
     setVisible(false);
   };
-
-  console.log(deleteQuote);
 
   return (
     <>
@@ -81,10 +86,9 @@ export default function MyQuotes() {
               Create a new quote
             </Button>
           )}
-          {session.user.myquotes.length > 0 ||
-          (session.user.myquotes.length === 0 && deleteQuote) ? (
+          {myQuotes.length > 0 || (myQuotes.length === 0 && deleteQuote) ? (
             <Button
-              color={!deleteQuote ? "error" : "success"}
+              color={!deleteQuote ? "error" : "secondary"}
               rounded
               flat
               auto
@@ -92,7 +96,7 @@ export default function MyQuotes() {
                 deleteQuote ? setDeleteQuote(false) : setDeleteQuote(true)
               }
             >
-              {!deleteQuote ? "Delete Quote" : "Ready"}
+              {!deleteQuote ? "Delete Quote" : "Cancel"}
             </Button>
           ) : null}
           <Modal
@@ -155,7 +159,7 @@ export default function MyQuotes() {
           </Modal>
         </div>
       )}
-      {session?.user?.myquotes?.length > 0 && (
+      {myQuotes.length > 0 && (
         <div
           style={{
             display: "flex",
@@ -163,9 +167,14 @@ export default function MyQuotes() {
             flexWrap: "wrap",
           }}
         >
-          {session?.user?.myquotes.map((quote: QuotesTypes) => {
+          {myQuotes.map((quote: QuotesTypes) => {
             return (
-              <Card key={quote._id} quotes={quote} deleteQuote={deleteQuote} />
+              <Card
+                key={quote._id}
+                quotes={quote}
+                deleteQuote={deleteQuote}
+                setDeleteQuote={setDeleteQuote}
+              />
             );
           })}
         </div>
