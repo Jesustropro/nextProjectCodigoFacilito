@@ -1,14 +1,15 @@
 import { Navbar, Link, Text, Avatar, Dropdown, Input } from "@nextui-org/react";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export default function NavBar() {
   const router = useRouter();
   const {
     query: { id },
   } = useRouter();
+  const { data: session }: any = useSession();
 
-  const { data: session } = useSession();
   const collapseItems = [
     "Quotes Of The Day",
     "Wisdom",
@@ -78,7 +79,7 @@ export default function NavBar() {
           Love
         </Navbar.Link>
         <Navbar.Link
-          isActive={id === "User"}
+          isActive={id === "users"}
           onClick={() => router.push("/category/users")}
         >
           Users
@@ -101,7 +102,11 @@ export default function NavBar() {
                 as="button"
                 color="secondary"
                 size="md"
-                src="https://paperboogie.com/wp-content/uploads/2020/11/como-ordeno-mis-libros-150x150.jpg"
+                src={
+                  session?.user?.url
+                    ? session?.user?.url
+                    : "https://paperboogie.com/wp-content/uploads/2020/11/como-ordeno-mis-libros-150x150.jpg"
+                }
               />
             </Dropdown.Trigger>
           </Navbar.Item>
@@ -126,6 +131,11 @@ export default function NavBar() {
               <Dropdown.Item key="myquotes" withDivider>
                 <Navbar.Link onClick={() => router.push("/myquotes")}>
                   My quotes
+                </Navbar.Link>
+              </Dropdown.Item>
+              <Dropdown.Item key="myprofile" withDivider>
+                <Navbar.Link onClick={() => router.push("/profile/myprofile")}>
+                  Profile
                 </Navbar.Link>
               </Dropdown.Item>
               <Dropdown.Item key="logout" withDivider color="error">

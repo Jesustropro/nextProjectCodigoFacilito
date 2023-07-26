@@ -12,12 +12,25 @@ export default async function handler(
     const client = await clientPromise;
     const db = client.db("users-auth");
     const db2 = client.db("quotes");
-    const { id, myquote, deleteQuote } = req.query;
+    const { id, myquote, deleteQuote, name } = req.query;
 
     const { quotes, myquotes } = req.body;
 
     const idString = id?.toString().trim();
     const myquotestring = myquote?.toString().trim();
+
+    // if likedquotes exist, return likes user which matches the id of likedquotes
+
+    // name exist, filter by user with same name
+    if (name) {
+      const user = await db
+        .collection("users")
+        .aggregate([{ $match: { name: name } }])
+        .toArray();
+      res.status(200).json(user);
+      return;
+    }
+
     if (quotes !== null) {
       // insert one quotes in colecction quotes
 

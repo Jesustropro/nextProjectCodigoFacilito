@@ -1,4 +1,4 @@
-import { Card, Col, Text, Row, Modal, Button } from "@nextui-org/react";
+import { Card, Col, Text, Row, Modal, Button, User } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -7,6 +7,7 @@ import Image from "next/image";
 import html2canvas from "html2canvas";
 import style from "./card.module.css";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 interface QuoteParams {
   quotes: {
@@ -15,30 +16,31 @@ interface QuoteParams {
     content: string;
     tags: string[];
     likesCount?: number;
+    creator?: string;
   };
   deleteQuote: boolean;
+  favorites?: boolean;
   setDeleteQuote?: (value: boolean) => void;
 }
 export default function CardQuote({
   quotes,
   deleteQuote,
   setDeleteQuote,
+  favorites,
 }: QuoteParams) {
-  const {
-    query: { id },
-  } = useRouter();
-  const router = useRouter();
   const [visibleDownload, setVisibleDownload] = useState<boolean>(false);
   const handler = () => setVisibleDownload(true);
   const [colorShareCard, setColorSharedCard] = useState("white");
   const [fontColorSharedCard, setFontColorSharedCard] = useState("black");
   const menuSelectColorSharedCard = ["#6050DC", "#E48400", "#CDE1F3"];
-
+  const [quotesLiked, setQuotesLiked] = useState<any>([]);
+  const [userProfile, setUserProfile] = useState<any>(null);
   const { data: session, update }: any = useSession();
   const [alreadyLike, setAlreadyLike] = useState(false);
 
   const { author, content, tags, likesCount, _id } = quotes;
   const [countLikes, setCountLikes] = useState(likesCount);
+
   const exportImage = () => {
     return html2canvas(document.getElementById(`${quotes._id}`)!).then(
       (canvas) => {
@@ -52,9 +54,36 @@ export default function CardQuote({
     );
   };
 
+  if (quotes.creator) {
+    const getAuthor = async () => {
+      const res = await fetch(`/api/auth/users?creator=${quotes.creator}`);
+      const data = await res.json();
+      setUserProfile(data);
+    };
+    if (userProfile === null) {
+      getAuthor();
+    }
+  }
   useEffect(() => {
+    if (session) {
+      const fetchQuotes = async () => {
+        const res = await fetch(
+          `/api/auth/createquote?name=${session.user.name}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              quotes: null,
+            }),
+          }
+        );
+        const data = await res.json();
+        setQuotesLiked(data);
+      };
+      fetchQuotes();
+    }
     if (
-      session?.user?.likes.find(
+      quotesLiked[0]?.likes.find(
         (quoteLiked: { _id: string }) => quoteLiked._id === quotes._id
       )
     ) {
@@ -62,7 +91,7 @@ export default function CardQuote({
     }
 
     return setAlreadyLike(false), setCountLikes(likesCount);
-  }, [quotes, session?.user?.likes, likesCount]);
+  }, [quotes, session, session?.user?.name, likesCount, quotesLiked]);
 
   const deleteMyQuote = async () => {
     try {
@@ -305,9 +334,25 @@ ${author}`;
           </Button>
         </Modal.Footer>
       </Modal>
+
       <Card css={{ mw: "330px", margin: 2, marginTop: 10 }}>
         <Card.Header>
-          <Text b style={{ width: "100%" }}>
+          {quotes.creator && (
+            <Link key={_id} href={`/profile/${quotes.creator}`}>
+              <User
+                bordered
+                name=""
+                pointer
+                src={
+                  userProfile && userProfile.users[0].url
+                    ? userProfile.users[0].url
+                    : "https://paperboogie.com/wp-content/uploads/2020/11/como-ordeno-mis-libros-150x150.jpg"
+                }
+                color="secondary"
+              />
+            </Link>
+          )}
+          <Text b style={{ width: quotes.creator ? "60%" : "100%" }}>
             {tags?.length > 1
               ? tags.map((tag: any) => {
                   return `  ${tag}  `;
@@ -315,24 +360,22 @@ ${author}`;
               : tags[0]}
           </Text>
           {session && (
-            <Col>
-              <Row justify="flex-end">
-                {!deleteQuote && (
-                  <>
-                    <Image
-                      src={
-                        alreadyLike ? "/icons/dislike.svg" : "/icons/like.svg"
-                      }
-                      width={25}
-                      height={25}
-                      alt="icon like and dislike"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => {
-                        alreadyLike
-                          ? liked(quotes, { dislike: true })
-                          : liked(quotes, { dislike: null });
-                      }}
-                    />
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              {!deleteQuote && (
+                <>
+                  <Image
+                    src={alreadyLike ? "/icons/dislike.svg" : "/icons/like.svg"}
+                    width={25}
+                    height={25}
+                    alt="icon like and dislike"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      alreadyLike
+                        ? liked(quotes, { dislike: true })
+                        : liked(quotes, { dislike: null });
+                    }}
+                  />
+                  {!favorites && (
                     <p
                       style={{
                         marginLeft: "10px",
@@ -344,20 +387,20 @@ ${author}`;
                     >
                       {countLikes !== 0 && countLikes}
                     </p>
-                  </>
-                )}
-                {deleteQuote && (
-                  <Image
-                    src={"/icons/trash.svg"}
-                    width={25}
-                    height={25}
-                    alt="delete quote"
-                    style={{ cursor: "pointer" }}
-                    onClick={deleteMyQuote}
-                  />
-                )}
-              </Row>
-            </Col>
+                  )}
+                </>
+              )}
+              {deleteQuote && (
+                <Image
+                  src={"/icons/trash.svg"}
+                  width={25}
+                  height={25}
+                  alt="delete quote"
+                  style={{ cursor: "pointer" }}
+                  onClick={deleteMyQuote}
+                />
+              )}
+            </div>
           )}
         </Card.Header>
 

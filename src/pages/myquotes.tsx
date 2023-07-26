@@ -45,7 +45,7 @@ export default function MyQuotes() {
             body: JSON.stringify({
               quotes: {
                 author,
-                tags: [tags, "Users"],
+                tags: [tags],
                 content: quote,
                 likesCount: 0,
                 creator: session?.user?.name,
