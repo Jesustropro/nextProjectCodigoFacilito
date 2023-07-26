@@ -41,9 +41,28 @@ export default function CardQuote({
   const { author, content, tags, likesCount, _id, creator } = quotes;
   const [countLikes, setCountLikes] = useState(likesCount);
 
-  const exportImage = () => {
+  const exportImage = async ({ share }: any) => {
     return html2canvas(document.getElementById(`${quotes._id}`)!).then(
-      (canvas) => {
+      async (canvas) => {
+        if (share) {
+          const blob = await fetch(canvas.toDataURL()).then((r) => r.blob());
+
+          const filesArray = [
+            new File([blob], `${author}-${tags[0]}.png`, {
+              type: "image/png",
+            }),
+          ];
+
+          const data = {
+            files: filesArray,
+          };
+          console.log(data, filesArray);
+
+          if (navigator.canShare && navigator.canShare(data)) {
+            await navigator.share(data);
+          }
+          return;
+        }
         const link = document.createElement("a");
 
         link.download = `${author}-${tags[0]}.png`;
@@ -331,10 +350,20 @@ ${author}`;
             color="secondary"
             onPress={() => {
               setVisibleDownload(false);
-              exportImage();
+              exportImage({ share: null });
             }}
           >
             Download
+          </Button>
+          <Button
+            auto
+            color="secondary"
+            onPress={() => {
+              setVisibleDownload(false);
+              exportImage({ share: true });
+            }}
+          >
+            Share to Instagram
           </Button>
         </Modal.Footer>
       </Modal>
