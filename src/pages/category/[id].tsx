@@ -42,7 +42,9 @@ export async function getServerSideProps(context: any) {
       context.query.id?.slice(1);
 
     const res = await fetch(
-      `${process.env.NEXTAUTH_URL}/api/auth/quotes?limit=5&tag=${title}`
+      `${process.env.NEXTAUTH_URL}/api/auth/quotes?limit=5&${
+        title === "Users" ? "users" : "tag"
+      }=${title}`
     );
     const category5 = await res.json();
 

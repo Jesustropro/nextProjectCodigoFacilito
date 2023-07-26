@@ -6,7 +6,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const { limit, tag, id, top, topAuthor, author } = req.query;
+  const { limit, tag, id, top, topAuthor, author, users } = req.query;
   const { quotes, countLikes } = req.body;
 
   if (countLikes) {
@@ -56,6 +56,16 @@ export default async function handler(
       .find({})
       .sort({ likesCount: -1 })
       .limit(limitNum)
+      .toArray();
+    res.status(200).json(quotes);
+    return;
+  }
+
+  // if users exist filter quotes with have property creator
+  if (users) {
+    const quotes = await db
+      .collection("quotes")
+      .find({ creator: { $exists: true } })
       .toArray();
     res.status(200).json(quotes);
     return;
