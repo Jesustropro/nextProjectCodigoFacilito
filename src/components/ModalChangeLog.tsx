@@ -1,6 +1,6 @@
 import { Modal, Button, Text } from "@nextui-org/react";
 import { useState } from "react";
-export default function ChangeLog() {
+export default function ModalChangeLog() {
   const [visible, setVisible] = useState(true);
 
   const closeHandler = () => {
