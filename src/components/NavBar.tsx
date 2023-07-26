@@ -25,10 +25,10 @@ export default function NavBar() {
 
   return (
     <Navbar isBordered variant="sticky">
-      <Navbar.Toggle id={"toggle"} showIn="xs" />
+      <Navbar.Toggle id={"toggle"} showIn="sm" />
       <Navbar.Brand
         css={{
-          "@xs": {
+          "@sm": {
             w: "12%",
           },
         }}
@@ -45,7 +45,7 @@ export default function NavBar() {
       <Navbar.Content
         enableCursorHighlight
         activeColor="secondary"
-        hideIn="xs"
+        hideIn="sm"
         variant="highlight-rounded"
       >
         <Navbar.Link

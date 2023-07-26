@@ -18,7 +18,7 @@ export default function ModalChangeLog() {
     >
       <Modal.Header>
         <Text id="modal-title" size={18}>
-          v0.7.2-beta changelog
+          v0.7.4-beta changelog
         </Text>
       </Modal.Header>
       <Modal.Body>
@@ -28,6 +28,17 @@ export default function ModalChangeLog() {
           <br />
           Releases: <br />
           <ul style={{ listStyleType: "circle" }}>
+            <li>
+              v0.7.4
+              <ul style={{ listStyleType: "circle" }}>
+                <li>Now you can add a description to your profile!</li>
+                <li>
+                  In the user category, if you enter someones profile, you can
+                  see their profile picture, their description, their quotes and
+                  likes
+                </li>
+              </ul>
+            </li>
             <li>
               v0.7.2
               <ul style={{ listStyleType: "circle" }}>
