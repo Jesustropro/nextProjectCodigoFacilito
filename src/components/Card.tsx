@@ -54,17 +54,17 @@ export default function CardQuote({
     );
   };
 
-  if (creator) {
-    const getAuthor = async () => {
-      const res = await fetch(`/api/auth/users?creator=${creator}`);
-      const data = await res.json();
-      setUserProfile(data);
-    };
-    if (userProfile === null) {
+  useEffect(() => {
+    if (creator) {
+      const getAuthor = async () => {
+        const response = await fetch(`/api/auth/users?creator=${creator}`);
+        const data = await response.json();
+        setUserProfile(data);
+      };
+
       getAuthor();
     }
-  }
-
+  }, [creator]);
   useEffect(() => {
     if (session) {
       const fetchQuotes = async () => {
@@ -83,6 +83,9 @@ export default function CardQuote({
       };
       fetchQuotes();
     }
+  }, [session]);
+
+  useEffect(() => {
     if (
       quotesLiked[0]?.likes.find(
         (quoteLiked: { _id: string }) => quoteLiked._id === quotes._id

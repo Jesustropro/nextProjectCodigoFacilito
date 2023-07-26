@@ -52,6 +52,7 @@ export default async function handler(
       const post2 = await db2.collection("quotes").deleteOne({
         _id: new ObjectId(deleteQuote.toString()),
       });
+      return;
     }
     if (myquote) {
       const quotes = await db2
@@ -66,6 +67,7 @@ export default async function handler(
     res.status(500).json({
       message: "something broke :(",
     });
+    return;
   }
 }
 export const config = {
