@@ -2,7 +2,7 @@ import { Card, Col, Text, Row, Modal, Button, User } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import Image from "next/image";
 import html2canvas from "html2canvas";
 import style from "./card.module.css";
@@ -38,7 +38,7 @@ export default function CardQuote({
   const { data: session, update }: any = useSession();
   const [alreadyLike, setAlreadyLike] = useState(false);
 
-  const { author, content, tags, likesCount, _id } = quotes;
+  const { author, content, tags, likesCount, _id, creator } = quotes;
   const [countLikes, setCountLikes] = useState(likesCount);
 
   const exportImage = () => {
@@ -54,9 +54,9 @@ export default function CardQuote({
     );
   };
 
-  if (quotes.creator) {
+  if (creator) {
     const getAuthor = async () => {
-      const res = await fetch(`/api/auth/users?creator=${quotes.creator}`);
+      const res = await fetch(`/api/auth/users?creator=${creator}`);
       const data = await res.json();
       setUserProfile(data);
     };
@@ -64,6 +64,7 @@ export default function CardQuote({
       getAuthor();
     }
   }
+
   useEffect(() => {
     if (session) {
       const fetchQuotes = async () => {
