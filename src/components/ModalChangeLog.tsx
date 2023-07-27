@@ -18,7 +18,7 @@ export default function ModalChangeLog() {
     >
       <Modal.Header>
         <Text id="modal-title" size={18}>
-          v0.7.4-beta changelog
+          v0.7.5-beta changelog
         </Text>
       </Modal.Header>
       <Modal.Body>
@@ -28,6 +28,15 @@ export default function ModalChangeLog() {
           <br />
           Releases: <br />
           <ul style={{ listStyleType: "circle" }}>
+            <li>
+              v0.7.5
+              <ul style={{ listStyleType: "circle" }}>
+                <li>
+                  Now if you are on your phone or tablet you can share the
+                  quotes in your favorite apps
+                </li>
+              </ul>
+            </li>
             <li>
               v0.7.4
               <ul style={{ listStyleType: "circle" }}>

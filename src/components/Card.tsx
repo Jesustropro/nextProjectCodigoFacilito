@@ -41,6 +41,12 @@ export default function CardQuote({
   const { author, content, tags, likesCount, _id, creator } = quotes;
   const [countLikes, setCountLikes] = useState(likesCount);
 
+  const [windowSize, setWindowSize] = useState<any>(0);
+
+  useEffect(() => {
+    setWindowSize(window.innerWidth);
+    console.log(windowSize);
+  }, [windowSize]);
   const exportImage = async ({ share }: any) => {
     return html2canvas(document.getElementById(`${quotes._id}`)!).then(
       async (canvas) => {
@@ -345,26 +351,29 @@ ${author}`;
           >
             Close
           </Button>
-          <Button
-            auto
-            color="secondary"
-            onPress={() => {
-              setVisibleDownload(false);
-              exportImage({ share: null });
-            }}
-          >
-            Download
-          </Button>
-          <Button
-            auto
-            color="secondary"
-            onPress={() => {
-              setVisibleDownload(false);
-              exportImage({ share: true });
-            }}
-          >
-            Share to Instagram
-          </Button>
+          {windowSize > 960 ? (
+            <Button
+              auto
+              color="secondary"
+              onPress={() => {
+                setVisibleDownload(false);
+                exportImage({ share: null });
+              }}
+            >
+              Download
+            </Button>
+          ) : (
+            <Button
+              auto
+              color="secondary"
+              onPress={() => {
+                setVisibleDownload(false);
+                exportImage({ share: true });
+              }}
+            >
+              Share
+            </Button>
+          )}
         </Modal.Footer>
       </Modal>
 
