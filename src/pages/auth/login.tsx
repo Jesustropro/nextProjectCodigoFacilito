@@ -40,57 +40,82 @@ const Login = () => {
   return (
     <>
       <ToastContainer />
-      <h1
+      <section
         style={{
           display: "flex",
           justifyContent: "center",
-          paddingTop: "4rem",
-        }}
-      >
-        Log In
-      </h1>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
+          marginTop: "2rem",
+          height: "80vh",
           alignItems: "center",
-          height: "50vh",
-          justifyContent: "center",
         }}
       >
-        <form onSubmit={handlerSubmitForm}>
-          <div style={{ marginBottom: "2rem" }}>
-            <Input
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-              labelPlaceholder="Email"
-              value={email}
-              size="lg"
-              type="email"
-              required={true}
-            />
-          </div>
-          {"              "}
-          <div style={{ marginBottom: "2rem" }}>
-            <Input.Password
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-              value={password}
-              type="password"
-              labelPlaceholder="Password"
-              size="lg"
-              required={true}
-            />
-            <button style={{ marginLeft: "0.5rem" }}>Log In</button>
-          </div>
-        </form>
-        <span>
-          If you do not have an account you can register{" "}
-          <NextLink href="/auth/signup">here</NextLink>
-        </span>
-      </div>
+        {" "}
+        <div
+          style={{
+            borderRadius: "3rem",
+            width: "auto",
+            maxWidth: "95%",
+            height: "auto",
+            minHeight: "50%",
+            backgroundColor: "#0a0b0c",
+            alignItems: "center",
+            padding: "2rem",
+          }}
+        >
+          <h1
+            style={{
+              display: "flex",
+              width: "100%",
+              justifyContent: "center",
+            }}
+          >
+            Log In
+          </h1>
+          <form
+            style={{
+              marginTop: "2rem",
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "10px",
+            }}
+            onSubmit={handlerSubmitForm}
+          >
+            <div style={{ marginBottom: "2rem" }}>
+              <Input
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                labelPlaceholder="Email"
+                value={email}
+                size="lg"
+                type="email"
+                required={true}
+              />
+            </div>
+            {"              "}
+            <div style={{ marginBottom: "2rem" }}>
+              <Input.Password
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                value={password}
+                type="password"
+                labelPlaceholder="Password"
+                size="lg"
+                required={true}
+              />
+            </div>
+            <Button type="submit" auto color="secondary">
+              Sign In
+            </Button>
+          </form>
+          <span>
+            If you do not have an account you can register{" "}
+            <NextLink href="/auth/signup">here</NextLink>
+          </span>
+        </div>
+      </section>
+
       {error && (
         <div>
           <Modal

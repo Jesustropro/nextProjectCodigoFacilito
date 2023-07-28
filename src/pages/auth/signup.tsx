@@ -55,76 +55,102 @@ const SignUp = () => {
   };
 
   return (
-    <>
+    <div>
       <ToastContainer />
-      <h1
-        style={{
-          display: "flex",
-          justifyContent: "center",
-        }}
+
+      <section
+        style={{ display: "flex", justifyContent: "center", marginTop: "2rem" }}
       >
-        Sign Up
-      </h1>
-      <Grid.Container gap={3} justify="center">
-        <form onSubmit={handlerSubmitForm} style={{ marginTop: 40 }}>
-          <Grid xs={10}>
-            <Input
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-              labelPlaceholder="First name"
-              value={name}
-              size="lg"
-              required={true}
-            />
-          </Grid>
-          <Grid xs={10}>
-            <Input
-              onChange={(e) => {
-                setLastName(e.target.value);
-              }}
-              labelPlaceholder="LastName"
-              value={lastName}
-              size="lg"
-              required={true}
-            />
-          </Grid>
-          <Grid xs={12}>
-            <Input
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-              labelPlaceholder="Email"
-              type="email"
-              value={email}
-              size="lg"
-            />
-          </Grid>
-          <Grid xs={10}>
-            <Input.Password
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-              value={password}
-              labelPlaceholder="Password"
-              size="lg"
-            />
-          </Grid>
-          <Grid xs={10}>
-            <Input.Password
-              onChange={(e) => {
-                setRepeatPassword(e.target.value);
-              }}
-              value={repeatPassword}
-              labelPlaceholder="Repeat password"
-              size="lg"
-            />
-          </Grid>
-          <Grid xs={2}>
-            <button>Sign Up</button>
-          </Grid>
-        </form>
-      </Grid.Container>
+        <Grid.Container
+          gap={3}
+          justify="center"
+          style={{
+            borderRadius: "3rem",
+            width: "auto",
+            maxWidth: "85%",
+            backgroundColor: "#0a0b0c",
+          }}
+        >
+          <h1
+            style={{
+              display: "flex",
+              width: "100%",
+
+              justifyContent: "center",
+            }}
+          >
+            Sign Up
+          </h1>
+          <form onSubmit={handlerSubmitForm} style={{ marginTop: 40 }}>
+            <Grid xs={10}>
+              <Input
+                onChange={(e) => {
+                  e.target.value = e.target.value.trim();
+
+                  setName(e.target.value);
+                }}
+                labelPlaceholder="First name"
+                value={name}
+                size="lg"
+                required={true}
+              />
+            </Grid>
+            <Grid xs={10}>
+              <Input
+                onChange={(e) => {
+                  e.target.value = e.target.value.trim();
+                  setLastName(e.target.value);
+                }}
+                labelPlaceholder="LastName"
+                value={lastName}
+                size="lg"
+                required={true}
+              />
+            </Grid>
+            <Grid xs={12}>
+              <Input
+                onChange={(e) => {
+                  e.target.value = e.target.value.toLowerCase();
+
+                  setEmail(e.target.value);
+                }}
+                labelPlaceholder="Email"
+                type="email"
+                value={email}
+                required={true}
+                size="lg"
+              />
+            </Grid>
+            <Grid xs={10}>
+              <Input.Password
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                value={password}
+                labelPlaceholder="Password"
+                size="lg"
+                required={true}
+              />
+            </Grid>
+            <Grid xs={10}>
+              <Input.Password
+                onChange={(e) => {
+                  setRepeatPassword(e.target.value);
+                }}
+                value={repeatPassword}
+                labelPlaceholder="Repeat password"
+                size="lg"
+                required={true}
+              />
+            </Grid>
+            <Grid xs={2}>
+              <Button type="submit" auto color="secondary">
+                Sign Up
+              </Button>
+            </Grid>
+          </form>
+        </Grid.Container>
+      </section>
       {error && (
         <div>
           <Modal
@@ -149,7 +175,7 @@ const SignUp = () => {
           </Modal>
         </div>
       )}
-    </>
+    </div>
   );
 };
 export default SignUp;
