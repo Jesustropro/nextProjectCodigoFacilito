@@ -61,6 +61,7 @@ export default function CardQuote({
 
           const data = {
             files: filesArray,
+            url: "https://next-project-codigo-facilito.vercel.app/",
           };
           console.log(data, filesArray);
 
