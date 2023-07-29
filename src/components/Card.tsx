@@ -178,7 +178,7 @@ export default function CardQuote({
       try {
         if (countLikes && countLikes > 0) {
           setCountLikes(countLikes - 1);
-
+          setAlreadyLike(false);
           const result = await fetch(`/api/auth/quotes?id=${_id}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -193,19 +193,18 @@ export default function CardQuote({
           body: JSON.stringify({ quotes: null, likes: filteredLikes }),
         });
         updateSession({ deleteLike: true });
-        setAlreadyLike(false);
       } catch (error) {
         console.error(error);
       }
     } else {
       try {
+        setAlreadyLike(true);
         const result = await fetch(`/api/auth/liked?id=${session?.user?._id}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ quotes, likes: session?.user?.likes }),
         });
         updateSession({ deleteLike: null });
-        setAlreadyLike(true);
       } catch (error) {
         console.error(error);
       }

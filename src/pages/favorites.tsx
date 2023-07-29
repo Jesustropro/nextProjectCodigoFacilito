@@ -5,8 +5,10 @@ import { useState, useEffect } from "react";
 export default function Favorites() {
   const { data: session, update, status }: any = useSession();
   const [likedQuotes, setLikedQuotes] = useState<QuotesTypes[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     if (session) {
       const fetchQuotes = async () => {
         const res = await fetch(
@@ -15,13 +17,14 @@ export default function Favorites() {
         const data = await res.json();
         console.log(data);
         setLikedQuotes(data[0].likes);
+        setLoading(false);
       };
       fetchQuotes();
     }
   }, [session]);
   return (
     <>
-      {session ? (
+      {session && !loading ? (
         <>
           <h1 style={{ display: "flex", justifyContent: "center" }}>
             Favorites
@@ -46,6 +49,10 @@ export default function Favorites() {
             })}
           </div>
         </>
+      ) : session && loading ? (
+        <h1 style={{ display: "flex", justifyContent: "center" }}>
+          Loading...
+        </h1>
       ) : (
         <h1 style={{ display: "flex", justifyContent: "center" }}>
           Login to see your favorites
