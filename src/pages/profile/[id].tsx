@@ -10,17 +10,13 @@ export default function Profile() {
   const {
     query: { id },
   } = useRouter();
+  console.log(id);
   useEffect(() => {
     if (id) {
       const fetchQuotes = async () => {
-        const res = await fetch(`/api/auth/createquote?creatorId=${id}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            quotes: null,
-          }),
-        });
+        const res = await fetch(`/api/auth/createquote?creatorId=${id}`);
         const data = await res.json();
+        console.log(data);
         setUser(data);
       };
       fetchQuotes();

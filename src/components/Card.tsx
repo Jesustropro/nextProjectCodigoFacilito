@@ -95,14 +95,7 @@ export default function CardQuote({
     if (session) {
       const fetchQuotes = async () => {
         const res = await fetch(
-          `/api/auth/createquote?name=${session.user.name}`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              quotes: null,
-            }),
-          }
+          `/api/auth/createquote?creatorId=${session.user._id}`
         );
         const data = await res.json();
         setQuotesLiked(data);

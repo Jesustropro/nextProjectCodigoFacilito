@@ -21,7 +21,6 @@ export default async function handler(
     const creatorIdstring = creatorId?.toString().trim();
     // if likedquotes exist, return likes user which matches the id of likedquotes
 
-    // name exist, filter by user with same name
     if (creatorId) {
       const user = await db
         .collection("users")
