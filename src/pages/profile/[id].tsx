@@ -7,11 +7,13 @@ export default function Profile() {
   const { data: session, update, status }: any = useSession();
   const [user, setUser] = useState<any>(null);
   const [quotes, setQuotes] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const {
     query: { id },
   } = useRouter();
   console.log(id);
   useEffect(() => {
+    setLoading(true);
     if (id) {
       const fetchQuotes = async () => {
         const res = await fetch(`/api/auth/createquote?creatorId=${id}`);
@@ -31,6 +33,7 @@ export default function Profile() {
           }),
         });
         const data = await res.json();
+        setLoading(false);
         setQuotes(data);
       };
       fetchQuotes();
@@ -39,7 +42,7 @@ export default function Profile() {
 
   return (
     <div>
-      {user ? (
+      {user && !loading ? (
         <>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <section
@@ -110,7 +113,13 @@ export default function Profile() {
                   ? `Quotes of ${user[0].name} ${user[0].lastName}`
                   : `This user no have a quotes`}
               </h2>
-              <div style={{}}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
                 {quotes &&
                   quotes.map((quote: QuotesTypes) => {
                     return (
@@ -137,7 +146,13 @@ export default function Profile() {
                   ? `Likes of ${user[0].name} ${user[0].lastName}`
                   : `This user no have a likes`}
               </h2>
-              <div style={{}}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
                 {user[0].likes.map((quote: QuotesTypes) => {
                   return (
                     <Card
@@ -152,6 +167,8 @@ export default function Profile() {
             </div>
           </section>
         </>
+      ) : session && loading ? (
+        <h1>Loading...</h1>
       ) : (
         <div>Sign In to see users</div>
       )}
