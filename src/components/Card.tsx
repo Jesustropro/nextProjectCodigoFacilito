@@ -387,7 +387,7 @@ ${author}`;
                 name=""
                 pointer
                 src={
-                  userProfile && userProfile.users[0].url
+                  userProfile && userProfile.users[0]?.url
                     ? userProfile.users[0].url
                     : "https://paperboogie.com/wp-content/uploads/2020/11/como-ordeno-mis-libros-150x150.jpg"
                 }

@@ -13,7 +13,7 @@ export default function Profile() {
   useEffect(() => {
     if (id) {
       const fetchQuotes = async () => {
-        const res = await fetch(`/api/auth/createquote?name=${id}`, {
+        const res = await fetch(`/api/auth/createquote?creatorId=${id}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -77,7 +77,7 @@ export default function Profile() {
                 }}
               />
               <div>
-                <h1 style={{ width: "100%" }}>
+                <h1 style={{ width: "100%", fontSize: "2rem" }}>
                   {user[0].name} {user[0].lastName}
                 </h1>
                 <div

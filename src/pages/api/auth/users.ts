@@ -44,7 +44,7 @@ export default async function handler(
     if (creator) {
       const users = await db
         .collection("users")
-        .find({ name: creator })
+        .find({ _id: new ObjectId(creator.toString().trim()) })
         .toArray();
       res.status(200).json({
         users,

@@ -12,20 +12,20 @@ export default async function handler(
     const client = await clientPromise;
     const db = client.db("users-auth");
     const db2 = client.db("quotes");
-    const { id, myquote, deleteQuote, name } = req.query;
+    const { id, myquote, deleteQuote, creatorId } = req.query;
 
     const { quotes, myquotes } = req.body;
 
     const idString = id?.toString().trim();
     const myquotestring = myquote?.toString().trim();
-
+    const creatorIdstring = creatorId?.toString().trim();
     // if likedquotes exist, return likes user which matches the id of likedquotes
 
     // name exist, filter by user with same name
-    if (name) {
+    if (creatorId) {
       const user = await db
         .collection("users")
-        .aggregate([{ $match: { name: name } }])
+        .aggregate([{ $match: { _id: new ObjectId(creatorIdstring) } }])
         .toArray();
       res.status(200).json(user);
       return;
@@ -52,7 +52,6 @@ export default async function handler(
       const post2 = await db2.collection("quotes").deleteOne({
         _id: new ObjectId(deleteQuote.toString()),
       });
-      return;
     }
     if (myquote) {
       const quotes = await db2
@@ -67,7 +66,6 @@ export default async function handler(
     res.status(500).json({
       message: "something broke :(",
     });
-    return;
   }
 }
 export const config = {

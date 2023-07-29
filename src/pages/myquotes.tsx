@@ -18,7 +18,7 @@ export default function MyQuotes() {
     if (session) {
       const fetchQuotes = async () => {
         const res = await fetch(
-          `/api/auth/createquote?myquote=${session.user.name}`,
+          `/api/auth/createquote?myquote=${session.user._id}`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -48,7 +48,7 @@ export default function MyQuotes() {
                 tags: [tags],
                 content: quote,
                 likesCount: 0,
-                creator: session?.user?.name,
+                creator: session?.user?._id,
               },
               myquotes: session?.user?.myquotes,
             }),
