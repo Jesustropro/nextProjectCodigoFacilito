@@ -1,7 +1,7 @@
-import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-export const authOptions = {
+import NextAuth, { NextAuthOptions } from "next-auth";
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -69,10 +69,14 @@ export const authOptions = {
             return true;
           } else {
             console.error("error en el status");
+            return false;
           }
         } catch {
           console.log("error");
+          return false;
         }
+      } else {
+        return false;
       }
     },
     async jwt({ token, user, trigger, session }: any) {
