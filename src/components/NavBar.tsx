@@ -1,14 +1,29 @@
 import { Navbar, Link, Text, Avatar, Dropdown, Input } from "@nextui-org/react";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 
 export default function NavBar() {
   const router = useRouter();
   const {
     query: { id },
   } = useRouter();
+  const [userId, setUserId] = useState<any>(null);
+  const [image, setImage] = useState<any>(null);
   const { data: session }: any = useSession();
+
+  useEffect(() => {
+    if (session?.user?._id) {
+      const fetchQuotes = async () => {
+        const res = await fetch(
+          `/api/auth/createquote?creatorId=${session?.user?._id}`
+        );
+        const data: [] = await res.json();
+        setImage(...data, null);
+      };
+      fetchQuotes();
+    }
+  }, [image, session]);
 
   const collapseItems = [
     "Quotes Of The Day",
@@ -95,7 +110,7 @@ export default function NavBar() {
         }}
       >
         <Dropdown placement="bottom-right">
-          <Navbar.Item>
+          <Navbar.Item key="imageProfile">
             <Dropdown.Trigger>
               <Avatar
                 bordered
@@ -103,8 +118,8 @@ export default function NavBar() {
                 color="secondary"
                 size="md"
                 src={
-                  session?.user?.url
-                    ? session?.user?.url
+                  image
+                    ? image.url
                     : "https://paperboogie.com/wp-content/uploads/2020/11/como-ordeno-mis-libros-150x150.jpg"
                 }
               />

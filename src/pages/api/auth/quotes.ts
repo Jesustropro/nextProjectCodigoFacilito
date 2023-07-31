@@ -67,7 +67,8 @@ export default async function handler(
       .collection("quotes")
       .find({ creator: { $exists: true } })
       .toArray();
-    res.status(200).json(quotes);
+    //sort array so that last are firts
+    res.status(200).json(quotes.reverse());
     return;
   }
 

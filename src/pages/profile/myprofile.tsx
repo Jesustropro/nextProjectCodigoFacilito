@@ -5,28 +5,32 @@ import { Button } from "@nextui-org/react";
 export default function Profile() {
   //create url with upImage
   const { data: session, update }: any = useSession();
-  const [upImage, setUpImage] = useState<any>(session && session?.user?.url);
+  const [upImage, setUpImage] = useState<any>(null);
+  const [user, setUser] = useState<any>(null);
   const [edit, setEdit] = useState(false);
   const [area, setArea] = useState("");
+  const [id, setId] = useState<any>("");
   useEffect(() => {
-    setUpImage(session?.user?.url);
-    setArea(session?.user?.description);
-  }, [session?.user]);
+    setId(session?.user?._id);
+
+    if (id) {
+      const fetchQuotes = async () => {
+        const res = await fetch(`/api/auth/createquote?creatorId=${id}`);
+        const data: [] = await res.json();
+        setUser(...data, null);
+      };
+      fetchQuotes();
+    }
+
+    setArea(user?.description);
+  }, [session, id, upImage, user?.description, edit, user]);
 
   const updateDescription = async () => {
-    console.log(area);
-    setEdit(false);
     const response = await fetch(
       `/api/auth/users?id=${session?.user?._id}&description=${area}`
     );
     const result = await response.json();
-    update({
-      ...session,
-      user: {
-        ...session?.user,
-        description: area,
-      },
-    });
+    setEdit(false);
   };
 
   const uploadImage = async (e: any) => {
@@ -48,15 +52,6 @@ export default function Profile() {
       `/api/auth/users?id=${session?.user?._id}&url=${fileUrl.secure_url}`
     );
     const result = await response.json();
-
-    //update session
-    update({
-      ...session,
-      user: {
-        ...session?.user,
-        url: fileUrl.secure_url,
-      },
-    });
   };
   return (
     <>
@@ -94,8 +89,8 @@ export default function Profile() {
                   e.target.style.boxShadow = "none";
                 }}
                 src={
-                  session.user.url
-                    ? upImage
+                  user
+                    ? user.url
                     : "https://paperboogie.com/wp-content/uploads/2020/11/como-ordeno-mis-libros-150x150.jpg"
                 }
                 alt="user"
@@ -130,9 +125,9 @@ export default function Profile() {
                 }}
               >
                 {!edit &&
-                  (session.user.description ? (
+                  (user?.description ? (
                     <p>
-                      {session.user.description} {"  "}
+                      {user?.description} {"  "}
                       <img
                         style={{
                           width: "20px",
