@@ -117,7 +117,7 @@ export default function NavBar() {
                 color="secondary"
                 size="md"
                 src={
-                  image
+                  image && image?.url
                     ? image.url
                     : "https://paperboogie.com/wp-content/uploads/2020/11/como-ordeno-mis-libros-150x150.jpg"
                 }

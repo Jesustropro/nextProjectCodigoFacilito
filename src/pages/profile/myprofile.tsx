@@ -104,7 +104,7 @@ export default function Profile() {
                   e.target.style.boxShadow = "none";
                 }}
                 src={
-                  user
+                  user && user?.url
                     ? user.url
                     : "https://paperboogie.com/wp-content/uploads/2020/11/como-ordeno-mis-libros-150x150.jpg"
                 }

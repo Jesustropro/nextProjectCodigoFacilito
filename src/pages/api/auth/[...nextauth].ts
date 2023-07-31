@@ -42,8 +42,20 @@ export const authOptions: NextAuthOptions = {
     signOut: "/",
   },
   callbacks: {
+    async jwt({ token, user, trigger, session }: any) {
+      if (trigger === "update") {
+        return { ...token, ...session.user };
+      }
+      return { ...token, ...user };
+    },
+    async session({ session, token }: any) {
+      session.user = token;
+      return session;
+    },
     async signIn({ user, account }: any) {
-      //conect  to mongodb
+      if (account.provider === "credentials") {
+        return true;
+      }
       if (account.provider === "google") {
         const { name, email } = user;
         try {
@@ -64,8 +76,6 @@ export const authOptions: NextAuthOptions = {
             user.likes = response.usermdb[0].likes;
             user.lastName = response.usermdb[0].lastName;
 
-            console.log(user, "user");
-
             return true;
           } else {
             console.error("error en el status");
@@ -78,16 +88,6 @@ export const authOptions: NextAuthOptions = {
       } else {
         return false;
       }
-    },
-    async jwt({ token, user, trigger, session }: any) {
-      if (trigger === "update") {
-        return { ...token, ...session.user };
-      }
-      return { ...token, ...user };
-    },
-    async session({ session, token }: any) {
-      session.user = token;
-      return session;
     },
   },
 };
