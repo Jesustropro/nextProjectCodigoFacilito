@@ -10,20 +10,35 @@ export default function Profile() {
   const [edit, setEdit] = useState(false);
   const [area, setArea] = useState("");
   const [id, setId] = useState<any>("");
-  useEffect(() => {
-    setId(session?.user?._id);
+  const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    setLoading(true);
+    setId(session?.user?._id);
     if (id) {
       const fetchQuotes = async () => {
         const res = await fetch(`/api/auth/createquote?creatorId=${id}`);
         const data: [] = await res.json();
         setUser(...data, null);
+        console.log("a");
+        setLoading(false);
+
+        if (user) {
+          update({
+            ...session,
+            user: {
+              ...session?.user,
+              url: user?.url,
+            },
+          });
+        }
       };
+
       fetchQuotes();
     }
 
     setArea(user?.description);
-  }, [session, id, upImage, user?.description, edit, user]);
+  }, [session?.user?._id, id, upImage, user?.description, edit]);
 
   const updateDescription = async () => {
     const response = await fetch(
@@ -47,15 +62,15 @@ export default function Profile() {
     );
     const fileUrl = await res.json();
 
-    setUpImage(fileUrl.secure_url);
     const response = await fetch(
       `/api/auth/users?id=${session?.user?._id}&url=${fileUrl.secure_url}`
     );
     const result = await response.json();
+    setUpImage(fileUrl.secure_url);
   };
   return (
     <>
-      {session ? (
+      {session && user ? (
         <div style={{ display: "flex", justifyContent: "center" }}>
           <section
             style={{
@@ -192,6 +207,8 @@ export default function Profile() {
             </div>
           </section>
         </div>
+      ) : session && loading && !user ? (
+        <div>Loading...</div>
       ) : (
         <h1>Log in to view your profile</h1>
       )}

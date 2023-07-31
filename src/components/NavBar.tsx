@@ -13,17 +13,16 @@ export default function NavBar() {
   const { data: session }: any = useSession();
 
   useEffect(() => {
-    if (session?.user?._id) {
+    setUserId(session?.user?._id);
+    if (userId) {
       const fetchQuotes = async () => {
-        const res = await fetch(
-          `/api/auth/createquote?creatorId=${session?.user?._id}`
-        );
+        const res = await fetch(`/api/auth/createquote?creatorId=${userId}`);
         const data: [] = await res.json();
         setImage(...data, null);
       };
       fetchQuotes();
     }
-  }, [image, session]);
+  }, [userId, session]);
 
   const collapseItems = [
     "Quotes Of The Day",
