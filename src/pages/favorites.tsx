@@ -15,7 +15,7 @@ export default function Favorites() {
           `/api/auth/createquote?creatorId=${session.user._id}`
         );
         const data = await res.json();
-        console.log(data);
+
         setLikedQuotes(data[0].likes);
         setLoading(false);
       };

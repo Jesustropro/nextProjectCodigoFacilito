@@ -109,6 +109,33 @@ const Login = () => {
               Sign In
             </Button>
           </form>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginBottom: "1rem",
+            }}
+          >
+            <button
+              style={{
+                background: "transparent",
+                border: "none",
+              }}
+              onClick={() => signIn("google")}
+            >
+              <img
+                style={{
+                  width: "3rem",
+                  height: "3rem",
+
+                  background: "transparent",
+                  cursor: "pointer",
+                }}
+                src="/icons/google.svg"
+                alt="google"
+              />
+            </button>
+          </div>
           <span>
             If you do not have an account you can register{" "}
             <NextLink href="/auth/signup">here</NextLink>

@@ -18,7 +18,7 @@ export default function ModalChangeLog() {
     >
       <Modal.Header>
         <Text id="modal-title" size={18}>
-          v0.7.5-beta changelog
+          v0.8.1-beta changelog
         </Text>
       </Modal.Header>
       <Modal.Body>
@@ -28,6 +28,12 @@ export default function ModalChangeLog() {
           <br />
           Releases: <br />
           <ul style={{ listStyleType: "circle" }}>
+            <li>
+              v0.8.1
+              <ul style={{ listStyleType: "circle" }}>
+                <li>Now you can login using your google account</li>
+              </ul>
+            </li>
             <li>
               v0.7.5
               <ul style={{ listStyleType: "circle" }}>
