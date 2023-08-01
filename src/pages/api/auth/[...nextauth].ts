@@ -77,6 +77,13 @@ export const authOptions: NextAuthOptions = {
             user.lastName = response.usermdb[0].lastName;
 
             return true;
+          } else if (result.status === 200 && response.usernewmdb) {
+            user.name = response.usernewmdb[0].name;
+
+            user._id = response.usernewmdb[0]._id;
+            user.likes = response.usernewmdb[0].likes;
+            user.lastName = response.usernewmdb[0].lastName;
+            return true;
           } else {
             console.error("error en el status");
             return false;

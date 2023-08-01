@@ -21,7 +21,7 @@ export default async function handler(
   }
 
   try {
-    const { email } = req.body;
+    const { email, name } = req.body;
 
     const client = await clientPromise;
 
@@ -30,9 +30,26 @@ export default async function handler(
     const user = await db.collection("users").findOne({ email: email });
 
     if (!user) {
-      return res
-        .status(200)
-        .json({ message: "user does not exist", ok: false });
+      //extract from name, all the text that is after a space and declare it in a constant lastName
+      const lastName = name.split(" ")[1];
+      //extract from name, all the text that is before a space and declare it in a constant firstName
+      const firstName = name.split(" ")[0];
+
+      const newUser: any = await db.collection("users").insertOne({
+        name: firstName,
+        lastName,
+        email,
+        likes: [],
+        myquotes: [],
+      });
+
+      const usernewmdb = await db
+        .collection("users")
+        .aggregate([{ $match: { email: email } }])
+        .toArray();
+      return res.status(200).json({
+        usernewmdb,
+      });
     } else {
       const usermdb = await db
         .collection("users")
