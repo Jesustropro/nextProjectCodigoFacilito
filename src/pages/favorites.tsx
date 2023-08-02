@@ -15,8 +15,21 @@ export default function Favorites() {
           `/api/auth/createquote?creatorId=${session.user._id}`
         );
         const data = await res.json();
+        const userId = data[0].likes.map(async (user: any) => {
+          const resp = await fetch(`/api/auth/createquote?likesid=${user._id}`);
+          const likesUser = await resp.json();
+          return likesUser;
+        });
+        // resolve promise userId
+        const userIdResolved = await Promise.all(userId);
+        const likesUserTotal: any = [];
+        userIdResolved.map((user: any) => {
+          likesUserTotal.push(...user);
+        });
 
-        setLikedQuotes(data[0].likes);
+        console.log(likesUserTotal);
+
+        setLikedQuotes(likesUserTotal);
         setLoading(false);
       };
       fetchQuotes();

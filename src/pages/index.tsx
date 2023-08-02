@@ -3,6 +3,8 @@ import Card from "../components/Card";
 import Image from "next/image";
 import Link from "next/link";
 import ModalChangeLog from "../components/ModalChangeLog";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 export interface QuotesTypes {
   _id: string;
   author: string;
@@ -16,10 +18,48 @@ export interface QuotesTypes {
 export default function Home({
   topQuotes,
   topAuthor,
+  quotesOfTheDay,
 }: {
   topQuotes: [];
   topAuthor: [];
+  quotesOfTheDay: [];
 }) {
+  const router = useRouter();
+  const [quotes, setQuotes] = useState<QuotesTypes[]>([]);
+  const [refresh, setRefresh] = useState(false);
+  useEffect(() => {
+    const localQuotes = localStorage.getItem("quotesOfTheDay");
+    const localDate = localStorage.getItem("date");
+
+    if (localQuotes && localDate) {
+      const dateStorage: Date = JSON.parse(localDate);
+      const dateOld = new Date(dateStorage);
+      const dateNow: Date = new Date();
+
+      if (dateOld.getMinutes() !== dateNow.getMinutes()) {
+        const diff =
+          Math.abs(dateOld.getTime() - dateNow.getTime()) / 1000 / 60;
+        console.log(diff);
+        if (diff > 1440) {
+          console.log(diff);
+          localStorage.removeItem("quotesOfTheDay");
+          localStorage.removeItem("date");
+          setRefresh(true);
+          router.push(`/`, undefined, { scroll: false });
+          window.scrollTo(0, 0);
+        } else {
+          setQuotes(JSON.parse(localQuotes));
+        }
+      }
+    } else {
+      const date = new Date();
+      localStorage.setItem("date", JSON.stringify(date));
+      localStorage.setItem("quotesOfTheDay", JSON.stringify(quotesOfTheDay));
+      setQuotes(quotesOfTheDay);
+      setRefresh(false);
+    }
+  }, [quotesOfTheDay, refresh, router]);
+
   return (
     <>
       <Head>
@@ -28,24 +68,17 @@ export default function Home({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <ModalChangeLog />
-      <h1
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          marginBottom: "3rem",
-        }}
-      >
-        Quotes Of the Day
-      </h1>
-
       <section
         style={{
           display: "flex",
           width: "95%",
           height: "95%",
-          margin: "auto",
           flexWrap: "wrap",
           justifyContent: "space-around",
+          marginTop: "3rem",
+          marginBottom: "3rem",
+          marginLeft: "auto",
+          marginRight: "auto",
         }}
       >
         <div
@@ -141,7 +174,36 @@ export default function Home({
             </div>
           </div>
         </div>
-      </section>
+      </section>{" "}
+      <h1
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginBottom: "3rem",
+        }}
+      >
+        Quotes Of the Day
+      </h1>
+      <div
+        style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            flexWrap: "wrap",
+            width: "80%",
+            marginBottom: "2rem",
+            gap: "1rem",
+          }}
+        >
+          {quotes.map((quotes: any) => {
+            return (
+              <Card key={quotes._id} quotes={quotes} deleteQuote={false} />
+            );
+          })}
+        </div>
+      </div>
     </>
   );
 }
@@ -154,12 +216,17 @@ export async function getServerSideProps() {
     const resauthor = await fetch(
       `${process.env.NEXTAUTH_URL}/api/auth/quotes?limit=5&topAuthor=1`
     );
+    const resquotesOfTheDay = await fetch(
+      `${process.env.NEXTAUTH_URL}/api/auth/quotes?limit=8`
+    );
     const topAuthor = await resauthor.json();
     const topQuotes = await res.json();
+    const quotesOfTheDay = await resquotesOfTheDay.json();
     return {
       props: {
         topQuotes,
         topAuthor,
+        quotesOfTheDay,
       },
     };
   } catch (error) {

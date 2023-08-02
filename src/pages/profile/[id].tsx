@@ -7,6 +7,7 @@ export default function Profile() {
   const { data: session, update, status }: any = useSession();
   const [user, setUser] = useState<any>(null);
   const [quotes, setQuotes] = useState<any>(null);
+  const [likes, setLikes] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const {
     query: { id },
@@ -21,6 +22,27 @@ export default function Profile() {
         setUser(data);
       };
       fetchQuotes();
+      const fetchQuotesLikes = async () => {
+        const res = await fetch(`/api/auth/createquote?creatorId=${id}`);
+        const data = await res.json();
+        const userId = data[0].likes.map(async (user: any) => {
+          const resp = await fetch(`/api/auth/createquote?likesid=${user._id}`);
+          const likesUser = await resp.json();
+          return likesUser;
+        });
+        // resolve promise userId
+        const userIdResolved = await Promise.all(userId);
+        const likesUserTotal: any = [];
+        userIdResolved.map((user: any) => {
+          likesUserTotal.push(...user);
+        });
+
+        console.log(likesUserTotal);
+
+        setLikes(likesUserTotal);
+        setLoading(false);
+      };
+      fetchQuotesLikes();
     }
     if (id) {
       const fetchQuotes = async () => {
@@ -141,7 +163,7 @@ export default function Profile() {
                   marginBottom: "40px",
                 }}
               >
-                {user[0].likes.length > 0
+                {likes && likes.length > 0
                   ? `Likes of ${user[0].name} ${user[0].lastName}`
                   : `This user no have a likes`}
               </h2>
@@ -152,16 +174,17 @@ export default function Profile() {
                   alignItems: "center",
                 }}
               >
-                {user[0].likes.map((quote: QuotesTypes) => {
-                  return (
-                    <Card
-                      key={quote._id}
-                      quotes={quote}
-                      deleteQuote={false}
-                      favorites={true}
-                    />
-                  );
-                })}
+                {likes &&
+                  likes.map((quote: QuotesTypes) => {
+                    return (
+                      <Card
+                        key={quote._id}
+                        quotes={quote}
+                        deleteQuote={false}
+                        favorites={true}
+                      />
+                    );
+                  })}
               </div>
             </div>
           </section>

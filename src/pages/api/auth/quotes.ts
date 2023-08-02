@@ -98,6 +98,8 @@ export default async function handler(
     res.status(200).json(newQuotes);
     return;
   } else {
+    //random quotes any category
+
     const newQuotes = await db
       .collection("quotes")
       .aggregate([{ $sample: { size: limitNum } }])

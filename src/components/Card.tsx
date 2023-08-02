@@ -45,7 +45,6 @@ export default function CardQuote({
 
   useEffect(() => {
     setWindowSize(window.innerWidth);
-    console.log(windowSize);
   }, [windowSize]);
   const exportImage = async ({ share }: any) => {
     return html2canvas(document.getElementById(`${quotes._id}`)!).then(

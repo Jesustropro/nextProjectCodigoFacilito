@@ -12,13 +12,14 @@ export default async function handler(
     const client = await clientPromise;
     const db = client.db("users-auth");
     const db2 = client.db("quotes");
-    const { id, myquote, deleteQuote, creatorId } = req.query;
+    const { id, myquote, deleteQuote, creatorId, likesid } = req.query;
 
     const { quotes, myquotes } = req.body;
 
     const idString = id?.toString().trim();
     const myquotestring = myquote?.toString().trim();
     const creatorIdstring = creatorId?.toString().trim();
+    const likesidstring = likesid?.toString().trim();
     // if likedquotes exist, return likes user which matches the id of likedquotes
 
     if (creatorId) {
@@ -28,6 +29,14 @@ export default async function handler(
         .toArray();
       res.status(200).json(user);
       return;
+    }
+    if (likesid) {
+      //find in collection quotes, quotes with _id === likesid
+      const quotes = await db2
+        .collection("quotes")
+        .aggregate([{ $match: { _id: new ObjectId(likesidstring) } }])
+        .toArray();
+      res.status(200).json(quotes);
     }
 
     if (quotes !== null) {

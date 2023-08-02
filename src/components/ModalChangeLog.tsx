@@ -18,7 +18,7 @@ export default function ModalChangeLog() {
     >
       <Modal.Header>
         <Text id="modal-title" size={18}>
-          v0.8.2-beta changelog
+          v0.8.4-beta changelog
         </Text>
       </Modal.Header>
       <Modal.Body>
@@ -28,6 +28,23 @@ export default function ModalChangeLog() {
           <br />
           Releases: <br />
           <ul style={{ listStyleType: "circle" }}>
+            <li>
+              v0.8.4
+              <ul style={{ listStyleType: "circle" }}>
+                <li>
+                  The main page now shows 8 appointments that are updated every
+                  24 hours
+                </li>
+                <li>
+                  New refresh button, to read more quotes without reloading the
+                  page
+                </li>
+                <li>
+                  Now if a user deletes a quote, it will also be removed from
+                  any user who has saved it in favorites
+                </li>
+              </ul>
+            </li>
             <li>
               v0.8.2
               <ul style={{ listStyleType: "circle" }}>
