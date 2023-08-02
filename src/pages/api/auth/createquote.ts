@@ -37,6 +37,7 @@ export default async function handler(
         .aggregate([{ $match: { _id: new ObjectId(likesidstring) } }])
         .toArray();
       res.status(200).json(quotes);
+      return;
     }
 
     if (quotes !== null) {
@@ -60,6 +61,7 @@ export default async function handler(
       const post2 = await db2.collection("quotes").deleteOne({
         _id: new ObjectId(deleteQuote.toString()),
       });
+      return;
     }
     if (myquote) {
       const quotes = await db2
