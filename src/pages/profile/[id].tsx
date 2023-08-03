@@ -100,6 +100,7 @@ export default function Profile() {
                 <h1 style={{ width: "100%", fontSize: "2rem" }}>
                   {user[0].name} {user[0].lastName}
                 </h1>
+
                 <div
                   style={{
                     wordBreak: "break-word",

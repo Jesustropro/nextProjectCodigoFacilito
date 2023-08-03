@@ -5,6 +5,9 @@ import Link from "next/link";
 import ModalChangeLog from "../components/ModalChangeLog";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import { Loading } from "@nextui-org/react";
+
 export interface QuotesTypes {
   _id: string;
   author: string;
@@ -24,41 +27,77 @@ export default function Home({
   topAuthor: [];
   quotesOfTheDay: [];
 }) {
+  const { data: session, update, status }: any = useSession();
   const router = useRouter();
   const [quotes, setQuotes] = useState<QuotesTypes[]>([]);
-  const [refresh, setRefresh] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const [conection, setConection] = useState<any>(null);
   useEffect(() => {
-    const localQuotes = localStorage.getItem("quotesOfTheDay");
-    const localDate = localStorage.getItem("date");
-
-    if (localQuotes && localDate) {
-      const dateStorage: Date = JSON.parse(localDate);
-      const dateOld = new Date(dateStorage);
-      const dateNow: Date = new Date();
-
-      if (dateOld.getMinutes() !== dateNow.getMinutes()) {
-        const diff =
-          Math.abs(dateOld.getTime() - dateNow.getTime()) / 1000 / 60;
-        console.log(diff);
-        if (diff > 1440) {
-          console.log(diff);
-          localStorage.removeItem("quotesOfTheDay");
-          localStorage.removeItem("date");
-          setRefresh(true);
-          router.push(`/`, undefined, { scroll: false });
-          window.scrollTo(0, 0);
-        } else {
-          setQuotes(JSON.parse(localQuotes));
-        }
+    //wait a session
+    const fetchUser = async () => {
+      if (session && conection === null) {
+        const res = await fetch(
+          `/api/auth/createquote?creatorId=${session.user._id}`
+        );
+        const data: any = await res.json();
+        setConection(data[0].lastConexion);
       }
-    } else {
-      const date = new Date();
-      localStorage.setItem("date", JSON.stringify(date));
-      localStorage.setItem("quotesOfTheDay", JSON.stringify(quotesOfTheDay));
-      setQuotes(quotesOfTheDay);
-      setRefresh(false);
+    };
+    fetchUser();
+  }, [session]);
+
+  useEffect(() => {
+    setLoading(true);
+    if (conection) {
+      const fetchConexion = async () => {
+        const date = new Date();
+        const response = await fetch(
+          `/api/auth/users?id=${
+            session?.user?._id
+          }&lastconexion=${date.toLocaleString()}`
+        );
+        const result = await response.json();
+
+        const dateOld = new Date(conection);
+        const startDay = 0;
+        //check if dateold is before or after start day
+
+        if (dateOld.getHours() < startDay && date.getHours() >= startDay) {
+          const fetchConexion = async () => {
+            const date = new Date();
+            const response = await fetch(
+              `/api/auth/users?id=${session?.user?._id}&quotesOfTheDay=true`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  quotesOfTheDay: quotesOfTheDay,
+                }),
+              }
+            );
+            const result = await response.json();
+            setQuotes(quotesOfTheDay);
+            setLoading(false);
+          };
+          fetchConexion();
+        } else {
+          const fetchUser = async () => {
+            const res = await fetch(
+              `/api/auth/createquote?creatorId=${session.user._id}`
+            );
+            const data: any = await res.json();
+            setQuotes(data[0].quotesOfTheDay);
+            setLoading(false);
+          };
+          fetchUser();
+        }
+      };
+      fetchConexion();
     }
-  }, [quotesOfTheDay, refresh, router]);
+  }, [conection]);
 
   return (
     <>
@@ -175,35 +214,52 @@ export default function Home({
           </div>
         </div>
       </section>{" "}
-      <h1
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          marginBottom: "3rem",
-        }}
-      >
-        Quotes Of the Day
-      </h1>
-      <div
-        style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            flexWrap: "wrap",
-            width: "80%",
-            marginBottom: "2rem",
-            gap: "1rem",
-          }}
-        >
-          {quotes.map((quotes: any) => {
-            return (
-              <Card key={quotes._id} quotes={quotes} deleteQuote={false} />
-            );
-          })}
-        </div>
-      </div>
+      {session && (
+        <>
+          {" "}
+          <h1
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginBottom: "3rem",
+            }}
+          >
+            Quotes Of the Day
+          </h1>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "20px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                flexWrap: "wrap",
+                width: "80%",
+                marginBottom: "2rem",
+                gap: "1rem",
+              }}
+            >
+              {quotes && !loading ? (
+                quotes.map((quotes: any) => {
+                  return (
+                    <Card
+                      key={quotes._id}
+                      quotes={quotes}
+                      deleteQuote={false}
+                    />
+                  );
+                })
+              ) : (
+                <Loading color={"secondary"} size="xl" />
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 }

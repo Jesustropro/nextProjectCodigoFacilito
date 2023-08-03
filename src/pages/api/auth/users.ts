@@ -9,7 +9,8 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   try {
-    const { id, url, creator, description } = req.query;
+    const { id, url, creator, description, lastconexion } = req.query;
+    const { quotesOfTheDay } = req.body;
     const client = await clientPromise;
     const db = client.db("users-auth");
     const idString = id?.toString().trim();
@@ -33,6 +34,34 @@ export default async function handler(
         {
           $set: {
             description: description,
+          },
+        }
+      );
+      res.status(200).json({
+        message: "success",
+      });
+      return;
+    }
+    if (id && lastconexion) {
+      const post = await db.collection("users").updateOne(
+        { _id: new ObjectId(idString) },
+        {
+          $set: {
+            lastConexion: lastconexion,
+          },
+        }
+      );
+      res.status(200).json({
+        message: "success",
+      });
+      return;
+    }
+    if (id && quotesOfTheDay) {
+      const post = await db.collection("users").updateOne(
+        { _id: new ObjectId(idString) },
+        {
+          $set: {
+            quotesOfTheDay: quotesOfTheDay,
           },
         }
       );
