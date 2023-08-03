@@ -89,8 +89,27 @@ export default function Home({
               `/api/auth/createquote?creatorId=${session.user._id}`
             );
             const data: any = await res.json();
-            setQuotes(data[0].quotesOfTheDay);
-            setLoading(false);
+
+            if (data[0].quotesOfTheDay === undefined) {
+              const response = await fetch(
+                `/api/auth/users?id=${session?.user?._id}&quotesOfTheDay=true`,
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    quotesOfTheDay: quotesOfTheDay,
+                  }),
+                }
+              );
+              const result = await response.json();
+              setQuotes(quotesOfTheDay);
+              setLoading(false);
+            } else {
+              setQuotes(data[0].quotesOfTheDay);
+              setLoading(false);
+            }
           };
           fetchUser();
         }
