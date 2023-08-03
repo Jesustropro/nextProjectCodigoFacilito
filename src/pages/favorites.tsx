@@ -37,7 +37,7 @@ export default function Favorites() {
   }, [session]);
   return (
     <>
-      {session && !loading ? (
+      {session && likedQuotes.length >= 1 ? (
         <>
           <h1 style={{ display: "flex", justifyContent: "center" }}>
             Favorites
@@ -62,7 +62,7 @@ export default function Favorites() {
             })}
           </div>
         </>
-      ) : session && loading ? (
+      ) : session && loading && likedQuotes.length <= 1 ? (
         <h1 style={{ display: "flex", justifyContent: "center" }}>
           Loading...
         </h1>
