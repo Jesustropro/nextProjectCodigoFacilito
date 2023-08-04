@@ -59,11 +59,16 @@ export default function Home({
         );
         const result = await response.json();
 
-        const dateOld = new Date(conection);
-        const startDay = 0;
-        //check if dateold is before or after start day
+        //obtain string befores to the / in conection, and obtain first position in array and convert in number
+        const dateOld = Number(conection.split("/")[0]);
+        //
+        console.log(dateOld);
 
-        if (dateOld.getHours() < startDay && date.getHours() >= startDay) {
+        if (
+          dateOld < date.getDate() ||
+          (dateOld === 30 && date.getDate() === 1) ||
+          (dateOld === 31 && date.getDate() === 1)
+        ) {
           const fetchConexion = async () => {
             const date = new Date();
             const response = await fetch(

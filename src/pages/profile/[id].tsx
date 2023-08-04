@@ -54,8 +54,9 @@ export default function Profile() {
           }),
         });
         const data = await res.json();
-        setLoading(false);
+
         setQuotes(data);
+        setLoading(false);
       };
       fetchQuotes();
     }
@@ -194,10 +195,10 @@ export default function Profile() {
             </div>
           </section>
         </>
-      ) : session && loading ? (
+      ) : session && !user ? (
         <h1>Loading...</h1>
       ) : (
-        <div>Sign In to see users</div>
+        !session && <div>Sign In to see users</div>
       )}
     </div>
   );
