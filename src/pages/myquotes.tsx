@@ -1,4 +1,11 @@
-import { Modal, Button, Text, Input, Textarea } from "@nextui-org/react";
+import {
+  Modal,
+  Button,
+  Text,
+  Input,
+  Textarea,
+  Loading,
+} from "@nextui-org/react";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Card from "@/components/Card";
@@ -54,8 +61,6 @@ export default function MyQuotes() {
             }),
           }
         );
-
-        console.log(session.user);
       } catch (error) {
         console.error(error);
       }
@@ -159,7 +164,7 @@ export default function MyQuotes() {
           </Modal>
         </div>
       )}
-      {myQuotes.length > 0 && (
+      {myQuotes.length > 0 ? (
         <div
           style={{
             display: "flex",
@@ -178,6 +183,20 @@ export default function MyQuotes() {
             );
           })}
         </div>
+      ) : (
+        myQuotes.length > 0 === false &&
+        session && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "50vh",
+            }}
+          >
+            <Loading color={"secondary"} size="xl" />
+          </div>
+        )
       )}
     </>
   );

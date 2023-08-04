@@ -19,14 +19,13 @@ interface QuoteParams {
     creator?: string;
   };
   deleteQuote: boolean;
-  favorites?: boolean;
+
   setDeleteQuote?: (value: boolean) => void;
 }
 export default function CardQuote({
   quotes,
   deleteQuote,
   setDeleteQuote,
-  favorites,
 }: QuoteParams) {
   const [visibleDownload, setVisibleDownload] = useState<boolean>(false);
   const handler = () => setVisibleDownload(true);
@@ -42,6 +41,33 @@ export default function CardQuote({
   const [countLikes, setCountLikes] = useState(likesCount);
 
   const [windowSize, setWindowSize] = useState<any>(0);
+
+  useEffect(() => {
+    if (session) {
+      const fetchQuotes = async () => {
+        const res = await fetch(
+          `/api/auth/createquote?creatorId=${session.user._id}`
+        );
+        const data = await res.json();
+        setQuotesLiked(data);
+      };
+      fetchQuotes();
+    }
+  }, [session]);
+
+  useEffect(() => {
+    if (quotesLiked[0]) {
+      if (
+        quotesLiked[0].likes.find(
+          (quoteLiked: { _id: string }) => quoteLiked._id === quotes._id
+        )
+      ) {
+        return setAlreadyLike(true), setCountLikes(likesCount);
+      } else {
+        return setAlreadyLike(false), setCountLikes(likesCount);
+      }
+    }
+  }, [quotesLiked]);
 
   useEffect(() => {
     setWindowSize(window.innerWidth);
@@ -90,30 +116,6 @@ export default function CardQuote({
       getAuthor();
     }
   }, [creator]);
-  useEffect(() => {
-    if (session) {
-      const fetchQuotes = async () => {
-        const res = await fetch(
-          `/api/auth/createquote?creatorId=${session.user._id}`
-        );
-        const data = await res.json();
-        setQuotesLiked(data);
-      };
-      fetchQuotes();
-    }
-  }, [session]);
-
-  useEffect(() => {
-    if (
-      quotesLiked[0]?.likes.find(
-        (quoteLiked: { _id: string }) => quoteLiked._id === quotes._id
-      )
-    ) {
-      return setAlreadyLike(true), setCountLikes(likesCount);
-    }
-
-    return setAlreadyLike(false), setCountLikes(likesCount);
-  }, [quotes, session, likesCount, quotesLiked]);
 
   const deleteMyQuote = async () => {
     try {
@@ -409,19 +411,18 @@ ${author}`;
                         : liked(quotes, { dislike: null });
                     }}
                   />
-                  {!favorites && (
-                    <p
-                      style={{
-                        marginLeft: "10px",
-                        fontSize: "15px",
-                        color: "#fff",
-                        fontWeight: "bold",
-                        fontFamily: "cursive",
-                      }}
-                    >
-                      {countLikes !== 0 && countLikes}
-                    </p>
-                  )}
+
+                  <p
+                    style={{
+                      marginLeft: "10px",
+                      fontSize: "15px",
+                      color: "#fff",
+                      fontWeight: "bold",
+                      fontFamily: "cursive",
+                    }}
+                  >
+                    {countLikes !== 0 && countLikes}
+                  </p>
                 </>
               )}
               {deleteQuote && (

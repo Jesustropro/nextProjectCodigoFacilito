@@ -31,7 +31,6 @@ export default async function handler(
       return;
     }
     if (likesid) {
-      //find in collection quotes, quotes with _id === likesid
       const quotes = await db2
         .collection("quotes")
         .aggregate([{ $match: { _id: new ObjectId(likesidstring) } }])
@@ -41,8 +40,6 @@ export default async function handler(
     }
 
     if (quotes !== null) {
-      // insert one quotes in colecction quotes
-
       const post2 = await db2.collection("quotes").insertOne({
         author: quotes.author,
         tags: quotes.tags,

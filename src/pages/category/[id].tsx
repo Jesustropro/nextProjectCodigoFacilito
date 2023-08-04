@@ -20,7 +20,6 @@ export default function Category({ category5 }: any) {
   };
 
   useEffect(() => {
-    console.log("a");
     setInitialId(id);
     if (initialId == id) {
       const local = sessionStorage.getItem("category5");

@@ -2,6 +2,7 @@ import { useSession } from "next-auth/react";
 import Card from "@/components/Card";
 import { QuotesTypes } from "./index";
 import { useState, useEffect } from "react";
+import { Loading } from "@nextui-org/react";
 export default function Favorites() {
   const { data: session, update, status }: any = useSession();
   const [likedQuotes, setLikedQuotes] = useState<QuotesTypes[]>([]);
@@ -20,14 +21,12 @@ export default function Favorites() {
           const likesUser = await resp.json();
           return likesUser;
         });
-        // resolve promise userId
+
         const userIdResolved = await Promise.all(userId);
         const likesUserTotal: any = [];
         userIdResolved.map((user: any) => {
           likesUserTotal.push(...user);
         });
-
-        console.log(likesUserTotal);
 
         setLikedQuotes(likesUserTotal);
         setLoading(false);
@@ -52,20 +51,22 @@ export default function Favorites() {
           >
             {likedQuotes.map((quote: QuotesTypes) => {
               return (
-                <Card
-                  key={quote._id}
-                  quotes={quote}
-                  deleteQuote={false}
-                  favorites={true}
-                />
+                <Card key={quote._id} quotes={quote} deleteQuote={false} />
               );
             })}
           </div>
         </>
       ) : session && loading && likedQuotes.length <= 1 ? (
-        <h1 style={{ display: "flex", justifyContent: "center" }}>
-          Loading...
-        </h1>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "80vh",
+          }}
+        >
+          <Loading color={"secondary"} size="xl" />
+        </div>
       ) : (
         <h1 style={{ display: "flex", justifyContent: "center" }}>
           Login to see your favorites

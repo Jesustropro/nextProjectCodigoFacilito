@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { Button } from "@nextui-org/react";
+import { Button, Loading } from "@nextui-org/react";
 
 export default function Profile() {
   //create url with upImage
@@ -11,7 +11,7 @@ export default function Profile() {
   const [area, setArea] = useState("");
   const [id, setId] = useState<any>("");
   const [loading, setLoading] = useState(false);
-
+  const [loadingImage, setLoadingImage] = useState(false);
   useEffect(() => {
     setLoading(true);
     setId(session?.user?._id);
@@ -20,8 +20,6 @@ export default function Profile() {
         const res = await fetch(`/api/auth/createquote?creatorId=${id}`);
         const data: [] = await res.json();
         setUser(...data, null);
-        console.log("a");
-        setLoading(false);
 
         if (user) {
           update({
@@ -32,6 +30,8 @@ export default function Profile() {
             },
           });
         }
+        setLoading(false);
+        setLoadingImage(false);
       };
 
       fetchQuotes();
@@ -49,6 +49,7 @@ export default function Profile() {
   };
 
   const uploadImage = async (e: any) => {
+    setLoadingImage(true);
     const file = e.target.files[0];
     const data = new FormData();
     data.append("file", file);
@@ -70,7 +71,7 @@ export default function Profile() {
   };
   return (
     <>
-      {session && user ? (
+      {user ? (
         <div style={{ display: "flex", justifyContent: "center" }}>
           <section
             style={{
@@ -92,33 +93,56 @@ export default function Profile() {
               }}
               // create style with onMouseOver
             >
-              <img
-                onMouseOver={(e: any) => {
-                  e.target.style.border = "4px solid #9750dd";
-                  e.target.style.transition = "0.5s";
-                  e.target.style.boxShadow = "0px 0px 10px #9750dd";
-                }}
-                onMouseOut={(e: any) => {
-                  e.target.style.border = "4px solid blue";
-                  e.target.style.transition = "0.5s";
-                  e.target.style.boxShadow = "none";
-                }}
-                src={
-                  user && user?.url
-                    ? user.url
-                    : "https://paperboogie.com/wp-content/uploads/2020/11/como-ordeno-mis-libros-150x150.jpg"
-                }
-                alt="user"
-                style={{
-                  width: "200px",
-                  height: "200px",
-                  borderRadius: "6rem",
-                  border: "4px solid blue",
+              {!loadingImage ? (
+                <img
+                  onMouseOver={(e: any) => {
+                    e.target.style.border = "4px solid #9750dd";
+                    e.target.style.transition = "0.5s";
+                    e.target.style.boxShadow = "0px 0px 10px #9750dd";
+                  }}
+                  onMouseOut={(e: any) => {
+                    e.target.style.border = "4px solid blue";
+                    e.target.style.transition = "0.5s";
+                    e.target.style.boxShadow = "none";
+                  }}
+                  src={
+                    user && user?.url
+                      ? user.url
+                      : "https://paperboogie.com/wp-content/uploads/2020/11/como-ordeno-mis-libros-150x150.jpg"
+                  }
+                  alt="user"
+                  style={{
+                    width: "200px",
+                    height: "200px",
+                    borderRadius: "6rem",
+                    border: "4px solid blue",
 
-                  objectFit: "cover",
-                  marginRight: "2rem",
-                }}
-              />
+                    objectFit: "cover",
+                    marginRight: "2rem",
+                  }}
+                />
+              ) : (
+                <div
+                  style={{
+                    width: "200px",
+                    height: "200px",
+                    borderRadius: "6rem",
+                    border: "4px solid blue",
+                    marginRight: "2rem",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      height: "100%",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Loading color={"secondary"} size="xl" />
+                  </div>
+                </div>
+              )}
             </label>
             <input
               id="input-file"
@@ -207,10 +231,19 @@ export default function Profile() {
             </div>
           </section>
         </div>
-      ) : session && loading && !user ? (
-        <div>Loading...</div>
+      ) : session && !user && loading ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            height: "80vh",
+            alignItems: "center",
+          }}
+        >
+          <Loading color={"secondary"} size="xl" />
+        </div>
       ) : (
-        <h1>Log in to view your profile</h1>
+        !user && !session && <h1>Log in to view your profile</h1>
       )}
     </>
   );

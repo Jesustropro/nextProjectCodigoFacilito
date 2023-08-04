@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { QuotesTypes } from "../index";
 import Card from "@/components/Card";
+import { Loading } from "@nextui-org/react";
 export default function Profile() {
   const { data: session, update, status }: any = useSession();
   const [user, setUser] = useState<any>(null);
@@ -36,8 +37,6 @@ export default function Profile() {
         userIdResolved.map((user: any) => {
           likesUserTotal.push(...user);
         });
-
-        console.log(likesUserTotal);
 
         setLikes(likesUserTotal);
         setLoading(false);
@@ -169,9 +168,13 @@ export default function Profile() {
                   marginBottom: "40px",
                 }}
               >
-                {likes && likes.length > 0
-                  ? `Likes of ${user[0].name} ${user[0].lastName}`
-                  : `This user no have a likes`}
+                {!loading && likes && likes.length > 0 ? (
+                  `Likes of ${user[0].name} ${user[0].lastName}`
+                ) : likes && likes.length > 0 === false && !loading ? (
+                  `This user no have a likes`
+                ) : (
+                  <></>
+                )}
               </h2>
               <div
                 style={{
@@ -180,7 +183,7 @@ export default function Profile() {
                   alignItems: "center",
                 }}
               >
-                {likes &&
+                {likes && !loading ? (
                   likes.map((quote: QuotesTypes) => {
                     return (
                       <Card
@@ -190,13 +193,32 @@ export default function Profile() {
                         favorites={true}
                       />
                     );
-                  })}
+                  })
+                ) : (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Loading color={"secondary"} size="xl" />
+                  </div>
+                )}
               </div>
             </div>
           </section>
         </>
       ) : session && !user ? (
-        <h1>Loading...</h1>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            height: "80vh",
+            alignItems: "center",
+          }}
+        >
+          <Loading color={"secondary"} size="xl" />
+        </div>
       ) : (
         !session && <div>Sign In to see users</div>
       )}
