@@ -167,13 +167,11 @@ export default function Profile() {
                   marginBottom: "40px",
                 }}
               >
-                {!loading && likes && likes.length > 0 ? (
-                  `Likes of ${user[0].name} ${user[0].lastName}`
-                ) : likes && likes.length > 0 === false && !loading ? (
-                  `This user no have a likes`
-                ) : (
-                  <></>
-                )}
+                {!loading && likes && likes.length > 0
+                  ? `Likes of ${user[0].name} ${user[0].lastName}`
+                  : likes && likes.length > 0 === false && !loading
+                  ? `This user no have a likes`
+                  : `Likes of ${user[0].name} ${user[0].lastName}`}
               </h2>
               <div
                 style={{
@@ -193,12 +191,7 @@ export default function Profile() {
                     );
                   })
                 ) : (
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                    }}
-                  >
+                  <div>
                     <Loading color={"secondary"} size="xl" />
                   </div>
                 )}
