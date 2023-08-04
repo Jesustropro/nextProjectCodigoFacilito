@@ -153,7 +153,6 @@ export default function Profile() {
                         key={quote._id}
                         quotes={quote}
                         deleteQuote={false}
-                        favorites={true}
                       />
                     );
                   })}
@@ -190,7 +189,6 @@ export default function Profile() {
                         key={quote._id}
                         quotes={quote}
                         deleteQuote={false}
-                        favorites={true}
                       />
                     );
                   })
