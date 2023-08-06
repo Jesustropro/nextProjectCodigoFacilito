@@ -128,6 +128,7 @@ export default function Home({
           }&lastconexion=${date.toLocaleString()}`
         );
         const result = await response.json();
+        setConection(date.toLocaleString());
       };
       fetchConexion();
     }
