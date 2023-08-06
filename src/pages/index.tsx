@@ -34,7 +34,6 @@ export default function Home({
 
   const [conection, setConection] = useState<any>(null);
   useEffect(() => {
-    //wait a session
     const fetchUser = async () => {
       if (session && conection === null) {
         const res = await fetch(
@@ -118,6 +117,17 @@ export default function Home({
           };
           fetchUser();
         }
+      };
+      fetchConexion();
+    } else {
+      const fetchConexion = async () => {
+        const date = new Date();
+        const response = await fetch(
+          `/api/auth/users?id=${
+            session?.user?._id
+          }&lastconexion=${date.toLocaleString()}`
+        );
+        const result = await response.json();
       };
       fetchConexion();
     }
