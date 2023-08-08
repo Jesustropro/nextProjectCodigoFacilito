@@ -70,7 +70,7 @@ const SignUp = () => {
             borderRadius: "3rem",
             width: "auto",
             maxWidth: "85%",
-            backgroundColor: theme === "dark" ? "#16181A " : "#C8AE7D",
+            backgroundColor: theme === "light" ? "#C8AE7D" : "#16181A ",
           }}
         >
           <h1

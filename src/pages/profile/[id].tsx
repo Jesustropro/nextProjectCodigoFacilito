@@ -82,7 +82,8 @@ export default function Profile() {
                 width: "auto",
                 maxWidth: "80%",
                 minWidth: "50%",
-                backgroundColor: themeValue === "dark" ? "#16181A " : "#C8AE7D",
+                backgroundColor:
+                  themeValue === "light" ? "#C8AE7D" : "#16181A ",
               }}
             >
               <img

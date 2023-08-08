@@ -60,7 +60,7 @@ const Login = () => {
             maxWidth: "95%",
             height: "auto",
             minHeight: "50%",
-            backgroundColor: theme === "dark" ? "#16181A " : "#C8AE7D",
+            backgroundColor: theme === "light" ? "#C8AE7D" : "#16181A ",
             alignItems: "center",
             padding: "2rem",
           }}

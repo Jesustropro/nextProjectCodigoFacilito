@@ -167,8 +167,8 @@ export default function Home({
             height: "380px",
             borderRadius: "20px",
             backgroundColor:
-              stateTheme === "dark" ? "rgba(16,16,16)" : "#C8AE7D",
-            border: theme === "dark" ? "1px white solid" : "",
+              stateTheme === "light" ? "#C8AE7D" : "rgba(16,16,16)",
+            border: "1px white solid",
             marginBottom: "1rem",
           }}
         >
@@ -206,8 +206,8 @@ export default function Home({
             height: "380px",
             borderRadius: "20px",
             backgroundColor:
-              stateTheme === "dark" ? "rgba(16,16,16)" : "#C8AE7D",
-            border: theme === "dark" ? "1px white solid" : "",
+              stateTheme === "light" ? "#C8AE7D" : "rgba(16,16,16)",
+            border: "1px white solid",
           }}
         >
           <h2
