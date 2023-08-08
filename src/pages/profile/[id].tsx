@@ -99,9 +99,9 @@ export default function Profile() {
                   height: "200px",
                   borderRadius: "6rem",
                   border:
-                    themeValue === "dark"
-                      ? "4px solid blue"
-                      : "4px solid #65451F",
+                    themeValue === "light"
+                      ? "4px solid #65451F"
+                      : "4px solid blue",
                   objectFit: "cover",
                   marginRight: "2rem",
                 }}
