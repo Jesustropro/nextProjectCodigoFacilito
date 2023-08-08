@@ -168,7 +168,7 @@ export default function Home({
             borderRadius: "20px",
             backgroundColor:
               stateTheme === "light" ? "#C8AE7D" : "rgba(16,16,16)",
-            border: "1px white solid",
+
             marginBottom: "1rem",
           }}
         >
@@ -207,7 +207,6 @@ export default function Home({
             borderRadius: "20px",
             backgroundColor:
               stateTheme === "light" ? "#C8AE7D" : "rgba(16,16,16)",
-            border: "1px white solid",
           }}
         >
           <h2

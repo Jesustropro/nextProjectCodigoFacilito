@@ -156,23 +156,28 @@ export default function NavBar() {
                   />
                 </div>
               </Dropdown.Item>
-              <Dropdown.Item key="favorites" withDivider>
+              <Dropdown.Item textValue="favorites" key="favorites" withDivider>
                 <Navbar.Link onClick={() => router.push("/favorites")}>
                   Favorites
                 </Navbar.Link>
               </Dropdown.Item>
-              <Dropdown.Item key="myquotes" withDivider>
+              <Dropdown.Item textValue="my quotes" key="myquotes" withDivider>
                 <Navbar.Link onClick={() => router.push("/myquotes")}>
                   My quotes
                 </Navbar.Link>
               </Dropdown.Item>
-              <Dropdown.Item key="myprofile" withDivider>
+              <Dropdown.Item textValue="profile" key="myprofile" withDivider>
                 <Navbar.Link onClick={() => router.push("/profile/myprofile")}>
                   Profile
                 </Navbar.Link>
               </Dropdown.Item>
 
-              <Dropdown.Item key="logout" withDivider color="error">
+              <Dropdown.Item
+                textValue="logout"
+                key="logout"
+                withDivider
+                color="error"
+              >
                 <div onClick={() => signOut()}>Log Out</div>
               </Dropdown.Item>
             </Dropdown.Menu>
