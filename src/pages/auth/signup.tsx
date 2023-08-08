@@ -4,7 +4,9 @@ import { Modal, Button, Text, Input, Grid } from "@nextui-org/react";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useTheme } from "next-themes";
 const SignUp = () => {
+  const { theme } = useTheme();
   const [name, setName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -68,7 +70,7 @@ const SignUp = () => {
             borderRadius: "3rem",
             width: "auto",
             maxWidth: "85%",
-            backgroundColor: "#0a0b0c",
+            backgroundColor: theme === "dark" ? "#16181A " : "#C8AE7D",
           }}
         >
           <h1
@@ -84,6 +86,8 @@ const SignUp = () => {
           <form onSubmit={handlerSubmitForm} style={{ marginTop: 40 }}>
             <Grid xs={10}>
               <Input
+                bordered
+                color="secondary"
                 onChange={(e) => {
                   e.target.value = e.target.value.trim();
 
@@ -97,6 +101,8 @@ const SignUp = () => {
             </Grid>
             <Grid xs={10}>
               <Input
+                bordered
+                color="secondary"
                 onChange={(e) => {
                   e.target.value = e.target.value.trim();
                   setLastName(e.target.value);
@@ -109,6 +115,8 @@ const SignUp = () => {
             </Grid>
             <Grid xs={12}>
               <Input
+                bordered
+                color="secondary"
                 onChange={(e) => {
                   e.target.value = e.target.value.toLowerCase();
 
@@ -123,6 +131,8 @@ const SignUp = () => {
             </Grid>
             <Grid xs={10}>
               <Input.Password
+                bordered
+                color="secondary"
                 onChange={(e) => {
                   setPassword(e.target.value);
                 }}
@@ -134,6 +144,8 @@ const SignUp = () => {
             </Grid>
             <Grid xs={10}>
               <Input.Password
+                bordered
+                color="secondary"
                 onChange={(e) => {
                   setRepeatPassword(e.target.value);
                 }}

@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Card from "@/components/Card";
-import { Button } from "@nextui-org/react";
+import { Button, Text } from "@nextui-org/react";
 export default function Category({ category5 }: any) {
   const {
     query: { id },
@@ -38,9 +38,18 @@ export default function Category({ category5 }: any) {
 
   return (
     <>
-      <h1
-        style={{ display: "flex", justifyContent: "center" }}
-      >{`${title} Quotes`}</h1>
+      <Text
+        h1
+        size={42}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          padding: "1rem",
+          textAlign: "center",
+        }}
+      >
+        {`${title} Quotes`}
+      </Text>
       <div
         style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}
       >

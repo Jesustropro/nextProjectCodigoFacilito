@@ -7,14 +7,14 @@ html::-webkit-scrollbar {
   width: 8px;
 }
 html::-webkit-scrollbar-thumb {
-  background-color: #8527b1;
+  background-color: var(--nextui-colors-secondary);
   border-radius: 8px;
 }
 .nextui-c-eFfoBo-ihQOVev-css::-webkit-scrollbar {
   width: 8px;
 }
 .nextui-c-eFfoBo-ihQOVev-css::-webkit-scrollbar-thumb {
-  background-color: #8527b1;
+  background-color: var(--nextui-colors-secondary);
   border-radius: 8px;
 }
 

@@ -1,10 +1,13 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { QuotesTypes } from "../index";
 import Card from "@/components/Card";
 import { Loading } from "@nextui-org/react";
+import { useTheme } from "next-themes";
 export default function Profile() {
+  const { theme } = useTheme();
+  const [themeValue, setThemeVaulue] = useState<any>(null);
   const { data: session, update, status }: any = useSession();
   const [user, setUser] = useState<any>(null);
   const [quotes, setQuotes] = useState<any>(null);
@@ -14,6 +17,9 @@ export default function Profile() {
     query: { id },
   } = useRouter();
 
+  useEffect(() => {
+    setThemeVaulue(theme);
+  }, [theme]);
   useEffect(() => {
     setLoading(true);
     if (id) {
@@ -76,7 +82,7 @@ export default function Profile() {
                 width: "auto",
                 maxWidth: "80%",
                 minWidth: "50%",
-                backgroundColor: "#16181A",
+                backgroundColor: themeValue === "dark" ? "#16181A " : "#C8AE7D",
               }}
             >
               <img
@@ -91,7 +97,10 @@ export default function Profile() {
                   width: "200px",
                   height: "200px",
                   borderRadius: "6rem",
-                  border: "4px solid blue",
+                  border:
+                    themeValue === "dark"
+                      ? "4px solid blue"
+                      : "4px solid #65451F",
                   objectFit: "cover",
                   marginRight: "2rem",
                 }}

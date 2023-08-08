@@ -42,18 +42,22 @@ export default function Favorites() {
             Favorites
           </h1>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              flexWrap: "wrap",
-            }}
-          >
-            {likedQuotes.map((quote: QuotesTypes) => {
-              return (
-                <Card key={quote._id} quotes={quote} deleteQuote={false} />
-              );
-            })}
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                flexWrap: "wrap",
+                width: "80%",
+                gap: "1rem",
+              }}
+            >
+              {likedQuotes.map((quote: QuotesTypes) => {
+                return (
+                  <Card key={quote._id} quotes={quote} deleteQuote={false} />
+                );
+              })}
+            </div>
           </div>
         </>
       ) : session && loading && likedQuotes.length <= 1 ? (

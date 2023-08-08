@@ -3,7 +3,8 @@ import { Link, Text, Avatar, Dropdown, Input, Navbar } from "@nextui-org/react";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-
+import { useTheme as useNextTheme } from "next-themes";
+import { Switch, useTheme } from "@nextui-org/react";
 export default function NavBar() {
   const router = useRouter();
   const {
@@ -12,7 +13,8 @@ export default function NavBar() {
   const [userId, setUserId] = useState<any>(null);
   const [image, setImage] = useState<any>(null);
   const { data: session }: any = useSession();
-
+  const { setTheme } = useNextTheme();
+  const { isDark, type } = useTheme();
   useEffect(() => {
     setUserId(session?.user?._id);
     if (userId) {
@@ -39,7 +41,11 @@ export default function NavBar() {
   ];
 
   return (
-    <Navbar isBordered variant="sticky">
+    <Navbar
+      isBordered
+      variant="sticky"
+      css={{ background: "$backgroundAlpha" }}
+    >
       <Navbar.Toggle id={"toggle"} showIn="sm" />
       <Navbar.Brand
         css={{
@@ -51,6 +57,7 @@ export default function NavBar() {
         <Text
           onClick={() => router.push("/")}
           b
+          size={20}
           color="inherit"
           style={{ cursor: "pointer" }}
         >
@@ -75,6 +82,7 @@ export default function NavBar() {
         >
           Wisdom
         </Navbar.Link>
+
         <Navbar.Link
           isActive={id === "friendship"}
           onClick={() => router.push("/category/friendship")}
@@ -128,15 +136,25 @@ export default function NavBar() {
 
           {session ? (
             <Dropdown.Menu aria-label="User menu actions" color="secondary">
-              <Dropdown.Item key="profile" css={{ height: "$18" }}>
-                <Text
-                  onClick={() => router.push("/")}
-                  b
-                  color="inherit"
-                  css={{ d: "flex" }}
+              <Dropdown.Item
+                textValue="name user"
+                key="profile"
+                css={{ height: "$18" }}
+              >
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  {`¡Hello ${session?.user?.name}!`}
-                </Text>
+                  <Text b color="inherit" css={{ d: "flex" }}>
+                    {`¡Hello ${session?.user?.name}!`}
+                  </Text>{" "}
+                  <Switch
+                    checked={isDark}
+                    onChange={(e) => {
+                      setTheme(e.target.checked ? "dark" : "light");
+                    }}
+                    size={"sm"}
+                  />
+                </div>
               </Dropdown.Item>
               <Dropdown.Item key="favorites" withDivider>
                 <Navbar.Link onClick={() => router.push("/favorites")}>
@@ -153,6 +171,7 @@ export default function NavBar() {
                   Profile
                 </Navbar.Link>
               </Dropdown.Item>
+
               <Dropdown.Item key="logout" withDivider color="error">
                 <div onClick={() => signOut()}>Log Out</div>
               </Dropdown.Item>
@@ -175,7 +194,6 @@ export default function NavBar() {
             isActive={id !== undefined ? item === id : index === 0}
           >
             <Link
-              color="inherit"
               css={{
                 minWidth: "100%",
               }}

@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { Loading } from "@nextui-org/react";
+import { useTheme } from "next-themes";
 
 export interface QuotesTypes {
   _id: string;
@@ -27,11 +28,13 @@ export default function Home({
   topAuthor: [];
   quotesOfTheDay: [];
 }) {
+  const { theme } = useTheme();
+
   const { data: session, update, status }: any = useSession();
   const router = useRouter();
   const [quotes, setQuotes] = useState<QuotesTypes[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-
+  const [stateTheme, setStateThme] = useState<any>(null);
   const [conection, setConection] = useState<any>(null);
   useEffect(() => {
     const fetchUser = async () => {
@@ -46,6 +49,9 @@ export default function Home({
     fetchUser();
   }, [session]);
 
+  useEffect(() => {
+    setStateThme(theme);
+  }, [theme]);
   useEffect(() => {
     setLoading(true);
     if (conection) {
@@ -160,8 +166,9 @@ export default function Home({
             width: "380px",
             height: "380px",
             borderRadius: "20px",
-            backgroundColor: "rgba(16,16,16)",
-            border: "1px white solid",
+            backgroundColor:
+              stateTheme === "dark" ? "rgba(16,16,16)" : "#C8AE7D",
+            border: theme === "dark" ? "1px white solid" : "",
             marginBottom: "1rem",
           }}
         >
@@ -170,6 +177,7 @@ export default function Home({
               paddingTop: "1rem",
               display: "flex",
               justifyContent: "center",
+
               marginBottom: "8rem",
             }}
           >
@@ -197,8 +205,9 @@ export default function Home({
             width: "380px",
             height: "380px",
             borderRadius: "20px",
-            backgroundColor: "rgba(16,16,16)",
-            border: "1px white solid",
+            backgroundColor:
+              stateTheme === "dark" ? "rgba(16,16,16)" : "#C8AE7D",
+            border: theme === "dark" ? "1px white solid" : "",
           }}
         >
           <h2
@@ -221,10 +230,7 @@ export default function Home({
             <div style={{ width: "80%" }}>
               {topAuthor.map((quote: QuotesTypes) => (
                 <div key={quote._id}>
-                  <Link
-                    style={{ color: "white" }}
-                    href={`/category/author/${quote._id}`}
-                  >
+                  <Link href={`/category/author/${quote._id}`}>
                     <h3
                       style={{
                         display: "flex",

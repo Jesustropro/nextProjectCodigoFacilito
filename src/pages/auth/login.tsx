@@ -6,7 +6,10 @@ import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import NextLink from "next/link";
+import { useTheme } from "next-themes";
 const Login = () => {
+  const { theme } = useTheme();
+
   const router = useRouter();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -57,7 +60,7 @@ const Login = () => {
             maxWidth: "95%",
             height: "auto",
             minHeight: "50%",
-            backgroundColor: "#0a0b0c",
+            backgroundColor: theme === "dark" ? "#16181A " : "#C8AE7D",
             alignItems: "center",
             padding: "2rem",
           }}
@@ -82,6 +85,8 @@ const Login = () => {
           >
             <div style={{ marginBottom: "2rem" }}>
               <Input
+                bordered
+                color="secondary"
                 onChange={(e) => {
                   setEmail(e.target.value);
                 }}
@@ -95,6 +100,8 @@ const Login = () => {
             {"              "}
             <div style={{ marginBottom: "2rem" }}>
               <Input.Password
+                bordered
+                color="secondary"
                 onChange={(e) => {
                   setPassword(e.target.value);
                 }}
@@ -138,7 +145,12 @@ const Login = () => {
           </div>
           <span>
             If you do not have an account you can register{" "}
-            <NextLink href="/auth/signup">here</NextLink>
+            <NextLink
+              href="/auth/signup"
+              style={{ fontFamily: "Roboto", fontWeight: "bold" }}
+            >
+              here
+            </NextLink>
           </span>
         </div>
       </section>

@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { Button, Loading } from "@nextui-org/react";
+import { useTheme } from "next-themes";
 
 export default function Profile() {
   //create url with upImage
+
+  const { theme } = useTheme();
+  const [themeValue, setThemeValue] = useState<any>(null);
   const { data: session, update }: any = useSession();
   const [upImage, setUpImage] = useState<any>(null);
   const [user, setUser] = useState<any>(null);
@@ -12,6 +16,9 @@ export default function Profile() {
   const [id, setId] = useState<any>("");
   const [loading, setLoading] = useState(false);
   const [loadingImage, setLoadingImage] = useState(false);
+  useEffect(() => {
+    setThemeValue(theme);
+  }, [theme]);
   useEffect(() => {
     setLoading(true);
     setId(session?.user?._id);
@@ -83,7 +90,7 @@ export default function Profile() {
               width: "auto",
               maxWidth: "80%",
               minWidth: "50%",
-              backgroundColor: "#16181A",
+              backgroundColor: themeValue === "dark" ? "#16181A " : "#C8AE7D",
             }}
           >
             <label
@@ -96,14 +103,26 @@ export default function Profile() {
               {!loadingImage ? (
                 <img
                   onMouseOver={(e: any) => {
-                    e.target.style.border = "4px solid #9750dd";
-                    e.target.style.transition = "0.5s";
-                    e.target.style.boxShadow = "0px 0px 10px #9750dd";
+                    if (themeValue === "dark") {
+                      e.target.style.border = "4px solid #9750dd";
+                      e.target.style.transition = "0.5s";
+                      e.target.style.boxShadow = "0px 0px 10px #9750dd";
+                    } else {
+                      e.target.style.border = "4px solid #65451F";
+                      e.target.style.transition = "0.5s";
+                      e.target.style.boxShadow = "0px 0px 15px #65451F";
+                    }
                   }}
                   onMouseOut={(e: any) => {
-                    e.target.style.border = "4px solid blue";
-                    e.target.style.transition = "0.5s";
-                    e.target.style.boxShadow = "none";
+                    if (themeValue === "dark") {
+                      e.target.style.border = "4px solid blue";
+                      e.target.style.transition = "0.5s";
+                      e.target.style.boxShadow = "none";
+                    } else {
+                      e.target.style.border = "4px solid #65451F";
+                      e.target.style.transition = "0.5s";
+                      e.target.style.boxShadow = "none";
+                    }
                   }}
                   src={
                     user && user?.url
@@ -115,7 +134,10 @@ export default function Profile() {
                     width: "200px",
                     height: "200px",
                     borderRadius: "6rem",
-                    border: "4px solid blue",
+                    border:
+                      themeValue === "dark"
+                        ? "4px solid blue"
+                        : "4px solid #65451F",
 
                     objectFit: "cover",
                     marginRight: "2rem",

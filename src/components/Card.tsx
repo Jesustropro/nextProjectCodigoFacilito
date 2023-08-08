@@ -416,7 +416,7 @@ ${author}`;
                     style={{
                       marginLeft: "10px",
                       fontSize: "15px",
-                      color: "#fff",
+
                       fontWeight: "bold",
                       fontFamily: "cursive",
                     }}
