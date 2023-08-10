@@ -72,7 +72,7 @@ export default function Category({ category5 }: any) {
           marginBottom: "10px",
         }}
       >
-        <Button onClick={refresh} shadow color="secondary" auto>
+        <Button onClick={refresh}  color="secondary" auto>
           Refresh
         </Button>
       </div>

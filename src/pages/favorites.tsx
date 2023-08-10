@@ -10,6 +10,7 @@ export default function Favorites() {
 
   useEffect(() => {
     setLoading(true);
+
     if (session) {
       const fetchQuotes = async () => {
         const res = await fetch(
